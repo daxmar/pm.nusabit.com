@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <link rel="icon" type="image/png" href="https://nusabit.com/assets/logo-48.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materi Pertemuan 9 - Form Ajaib & Input Data</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#E11D48', // Rose/Pink
+                        'secondary': '#BE123C',
+                        'tertiary': '#FB7185',
+                        'dark-bg': '#0F172A',
+                        'card-bg': '#1E293B',
+                        'code-bg': '#111827',
+                    },
+                    fontFamily: { 
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'shake': 'shake 0.5s ease-in-out',
+                        'pop': 'pop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        shake: {
+                            '0%, 100%': { transform: 'translateX(0)' },
+                            '25%': { transform: 'translateX(-5px)' },
+                            '75%': { transform: 'translateX(5px)' },
+                        },
+                        pop: {
+                            '0%': { transform: 'scale(0.8)' },
+                            '100%': { transform: 'scale(1)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { scroll-behavior: smooth; }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        
+        .code-preview { 
+            background: linear-gradient(135deg, #1e293b, #111827); 
+            color: #cbd5e1; 
+            padding: 1.5rem; 
+            border-radius: 0.85rem; 
+            font-family: 'Fira Code', monospace; 
+            overflow-x: auto; 
+            border: 1px solid #334155;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        .code-preview::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, #E11D48, #FB7185);
+        }
+
+        .tag { color: #f472b6; }
+        .attr { color: #fbbf24; }
+        .val { color: #60a5fa; }
+        .txt { color: #e5e7eb; }
+        .js { color: #38bdf8; }
+        .comment { color: #64748b; font-style: italic; }
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(225, 29, 72, 0.2);
+        }
+
+        .demo-input {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .demo-input:focus {
+            box-shadow: 0 0 0 4px rgba(225, 29, 72, 0.3);
+        }
+
+        .custom-scroll::-webkit-scrollbar { width: 8px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #0F172A; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #E11D48; }
+
+        .input-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .input-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-dark-bg text-gray-100 font-sans min-h-screen overflow-x-hidden custom-scroll selection:bg-primary selection:text-white">
+
+    <!-- Floating Background -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div class="absolute top-[-10%] right-[-10%] w-96 h-96 bg-primary/15 rounded-full blur-[100px] animate-pulse-slow"></div>
+        <div class="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-tertiary/10 rounded-full blur-[100px] animate-pulse-slow" style="animation-delay: 2s;"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-dark-bg/90 backdrop-blur-xl border-b border-primary/30 shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-primary to-tertiary rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-pen-to-square text-white text-sm"></i>
+                    </div>
+                    <span class="font-black text-xl tracking-tight">Materi<span class="text-primary font-extrabold">9</span></span>
+                </div>
+                <div class="flex gap-3 items-center">
+                    <a href="materi-8.html" class="text-gray-300 hover:text-primary transition-all text-sm font-semibold flex items-center gap-1 px-3 py-1.5 rounded-lg border border-transparent hover:border-primary/30">
+                        <i class="fas fa-arrow-left"></i> Materi 8
+                    </a>
+                    <a href="index.php" class="text-gray-400 hover:text-white transition-colors text-sm">
+                        <i class="fas fa-home"></i>
+                    </a>
+                    <a href="playground-1.html" class="bg-primary hover:bg-rose-700 text-white px-5 py-2 rounded-xl text-sm font-bold transition-all shadow-lg shadow-primary/30 flex items-center gap-2">
+                        <i class="fas fa-code"></i> Playground
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-6xl mx-auto pt-28 pb-16 px-4 sm:px-6 lg:px-8 relative z-10">
+
+        <!-- Hero Section -->
+        <header class="text-center mb-24 reveal active">
+            <div class="inline-flex flex-col items-center mb-8">
+                <div class="w-24 h-24 bg-gradient-to-br from-primary via-secondary to-tertiary rounded-3xl flex items-center justify-center shadow-2xl border-4 border-white/20 animate-float mb-3">
+                    <i class="fas fa-wand-magic-sparkles text-3xl text-white drop-shadow-lg"></i>
+                </div>
+                <span class="px-4 py-1.5 bg-primary/20 text-xs font-bold rounded-full text-primary border border-primary/30 uppercase tracking-wider">Form Magic! ✨</span>
+            </div>
+            <h1 class="text-5xl md:text-7xl font-black text-white mb-6 leading-tight">
+                Form <span class="bg-gradient-to-r from-primary via-tertiary to-rose-300 bg-clip-text text-transparent drop-shadow-2xl">Ajaib</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                Web bisa <strong class="text-tertiary">mendengar</strong> apa yang kamu ketik, 
+                <strong class="text-tertiary">membaca</strong> input yang diberikan, dan 
+                <strong class="text-tertiary">merespon</strong> secara personal! <br>
+                Saatnya website jadi <span class="text-primary font-bold">lebih pintar</span> dengan <code class="font-mono bg-black/30 px-3 py-1 rounded-full text-primary border border-primary/30"><form></code>!
+            </p>
+        </header>
+
+        <!-- Section 1: Apa itu Form? -->
+        <section class="mb-24 reveal">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6">
+                    <div class="inline-flex items-center gap-3 px-5 py-2 rounded-2xl bg-primary/20 text-primary text-sm font-bold border border-primary/30">
+                        <i class="fas fa-question-circle"></i> Konsep Dasar
+                    </div>
+                    <h2 class="text-4xl font-black text-white leading-tight">Apa itu <span class="text-primary"><form></span>?</h2>
+                    <p class="text-gray-300 text-lg leading-relaxed">
+                        Bayangkan kamu mendaftar ekskul di sekolah — pasti ada formulir kertas untuk diisi, kan? 
+                        Nah, di website, <strong class="text-primary">Form</strong> adalah "kertas digital" yang memungkinkan 
+                        user mengirimkan data ke web!
+                    </p>
+                    <div class="glass-card p-6 rounded-2xl border-l-4 border-primary">
+                        <p class="text-sm text-gray-300 italic">
+                            <i class="fas fa-lightbulb text-yellow-400 mr-2"></i>
+                            <strong>Analogi:</strong> Form = Kotak Surat Ajaib 🗳️. User tulis pesan, klik kirim, web terima!
+                        </p>
+                    </div>
+                </div>
+                <div class="code-preview text-sm lg:text-base">
+<span class="comment"><!-- Form paling sederhana --></span>
+<br><<span class="tag">form</span>>
+<br>  <<span class="tag">input</span> <span class="attr">type</span>=<span class="val">"text"</span> <span class="attr">placeholder</span>=<span class="val">"Nama kamu"</span>>
+<br>  <<span class="tag">button</span>>Kirim</<span class="tag">button</span>>
+<br></<span class="tag">form</span>>
+<br><br>
+<span class="comment"><!-- Hasil: Kotak input + tombol --></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Jenis-Jenis Input -->
+        <section class="mb-24 reveal">
+            <div class="text-center mb-14">
+                <h2 class="text-4xl md:text-5xl font-black text-white mb-4">Jenis-Jenis Input</h2>
+                <p class="text-xl text-gray-400">Banyak tipe input yang bisa dipakai! Setiap tipe punya fungsi unik.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Text -->
+                <div class="input-card glass-card p-6 rounded-2xl border border-primary/20 group">
+                    <div class="w-14 h-14 bg-blue-500/20 rounded-xl flex items-center justify-center mb-4 text-blue-400 text-2xl group-hover:scale-110 transition-transform">
+                        <i class="fas fa-font"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2 font-mono"><input type="text"></h3>
+                    <p class="text-gray-400 text-sm mb-3">Teks biasa. Paling sering dipakai untuk nama, alamat, pesan.</p>
+                    <div class="code-preview text-xs p-3">
+<<span class="tag">input</span> <span class="attr">type</span>=<span class="val">"text"</span> <span class="attr">placeholder</span>=<span class="val">"Nama lengkap"</span>>
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div class="input-card glass-card p-6 rounded-2xl border border-primary/20 group">
+                    <div class="w-14 h-14 bg-red-500/20 rounded-xl flex items-center justify-center mb-4 text-red-400 text-2xl group-hover:scale-110 transition-transform">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2 font-mono"><input type="password"></h3>
+                    <p class="text-gray-400 text-sm mb-3">Teks rahasia (jadi bintang ***). Cocok untuk kata sandi!</p>
+                    <div class="code-preview text-xs p-3">
+<<span class="tag">input</span> <span class="attr">type</span>=<span class="val">"password"</span> <span class="attr">placeholder</span>=<span class="val">"Kata sandi"</span>>
+                    </div>
+                </div>
+
+                <!-- Number -->
+                <div class="input-card glass-card p-6 rounded-2xl border border-primary/20 group">
+                    <div class="w-14 h-14 bg-green-500/20 rounded-xl flex items-center justify-center mb-4 text-green-400 text-2xl group-hover:scale-110 transition-transform">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2 font-mono"><input type="number"></h3>
+                    <p class="text-gray-400 text-sm mb-3">Input khusus angka. Ada tombol + / - otomatis!</p>
+                    <div class="code-preview text-xs p-3">
+<<span class="tag">input</span> <span class="attr">type</span>=<span class="val">"number"</span> <span class="attr">placeholder</span>=<span class="val">"Umur"</span> <span class="attr">min</span>=<span class="val">"1"</span>>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="input-card glass-card p-6 rounded-2xl border border-primary/20 group">
+                    <div class="w-14 h-14 bg-yellow-500/20 rounded-xl flex items-center justify-center mb-4 text-yellow-400 text-2xl group-hover:scale-110 transition-transform">
+                        <i class="fas fa-at"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2 font-mono"><input type="email"></h3>
+                    <p class="text-gray-400 text-sm mb-3">Validasi format email otomatis (harus ada @).</p>
+                    <div class="code-preview text-xs p-3">
+<<span class="tag">input</span> <span class="attr">type</span>=<span class="val">"email"</span> <span class="attr">placeholder</span>=<span class="val">"email@contoh.com"</span>>
+                    </div>
+                </div>
+
+                <!-- Date -->
+                <div class="input-card glass-card p-6 rounded-2xl border border-primary/20 group">
+                    <div class="w-14 h-14 bg-purple-500/20 rounded-xl flex items-center justify-center mb-4 text-purple-400 text-2xl group-hover:scale-110 transition-transform">
+                        <i class="fas fa-calendar"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2 font-mono"><input type="date"></h3>
+                    <p class="text-gray-400 text-sm mb-3">Kalender interaktif untuk milih tanggal lahir.</p>
+                    <div class="code-preview text-xs p-3">
+<<span class="tag">input</span> <span class="attr">type</span>=<span class="val">"date"</span>>
+                    </div>
+                </div>
+
+                <!-- Color -->
+                <div class="input-card glass-card p-6 rounded-2xl border border-primary/20 group">
+                    <div class="w-14 h-14 bg-pink-500/20 rounded-xl flex items-center justify-center mb-4 text-pink-400 text-2xl group-hover:scale-110 transition-transform">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2 font-mono"><input type="color"></h3>
+                    <p class="text-gray-400 text-sm mb-3">Pemilih warna dengan visual color picker!</p>
+                    <div class="code-preview text-xs p-3">
+<<span class="tag">input</span> <span class="attr">type</span>=<span class="val">"color"</span> <span class="attr">value</span>=<span class="val">"#ff0000"</span>>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Label, Placeholder, Required -->
+        <section class="mb-24 reveal">
+            <div class="text-center mb-14">
+                <h2 class="text-4xl md:text-5xl font-black text-white mb-4">Atribut Super Penting</h2>
+                <p class="text-xl text-gray-400">Tiga sahabat karib form: Label, Placeholder, Required!</p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                <div class="glass-card p-8 rounded-3xl text-center hover:border-primary/50 transition-all border border-gray-700 group">
+                    <div class="w-16 h-16 bg-blue-500/20 rounded-2xl flex items-center justify-center mx-auto mb-5 text-blue-400 text-3xl group-hover:rotate-6 transition-all">
+                        <i class="fas fa-tag"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3"><label></h3>
+                    <p class="text-gray-400 mb-4">Teks petunjuk <strong>di luar</strong> kotak input. Memberi tahu user "Apa yang harus diisi di sini?"</p>
+                    <div class="code-preview text-xs text-left">
+<<span class="tag">label</span>>Nama Lengkap:</<span class="tag">label</span>>
+<br><<span class="tag">input</span> <span class="attr">type</span>=<span class="val">"text"</span>>
+                    </div>
+                </div>
+
+                <div class="glass-card p-8 rounded-3xl text-center hover:border-primary/50 transition-all border border-gray-700 group">
+                    <div class="w-16 h-16 bg-green-500/20 rounded-2xl flex items-center justify-center mx-auto mb-5 text-green-400 text-3xl group-hover:rotate-6 transition-all">
+                        <i class="fas fa-pencil"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">placeholder="..."</h3>
+                    <p class="text-gray-400 mb-4">Teks petunjuk <strong>di dalam</strong> kotak input. Hilang saat user mulai mengetik.</p>
+                    <div class="code-preview text-xs text-left">
+<<span class="tag">input</span> <span class="attr">placeholder</span>=<span class="val">"Contoh: Budi Santoso"</span>>
+                    </div>
+                </div>
+
+                <div class="glass-card p-8 rounded-3xl text-center hover:border-primary/50 transition-all border border-gray-700 group">
+                    <div class="w-16 h-16 bg-red-500/20 rounded-2xl flex items-center justify-center mx-auto mb-5 text-red-400 text-3xl group-hover:rotate-6 transition-all">
+                        <i class="fas fa-asterisk"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">required</h3>
+                    <p class="text-gray-400 mb-4">Wajib diisi! Kalau kosong, form <strong>gagal</strong> dikirim. User akan diperingatkan otomatis.</p>
+                    <div class="code-preview text-xs text-left">
+<<span class="tag">input</span> <span class="attr">type</span>=<span class="val">"text"</span> <span class="attr">required</span>>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Live Demo Form -->
+        <section class="mb-24 reveal">
+            <div class="text-center mb-14">
+                <h2 class="text-4xl md:text-5xl font-black text-white mb-4">Demo Live 🎮</h2>
+                <p class="text-xl text-gray-400">Coba isi form di bawah dan lihat bagaimana web merespon!</p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-10 items-start">
+                <div class="glass-card p-8 rounded-3xl border border-primary/30">
+                    <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                        <i class="fas fa-magic text-primary"></i> Form Pendaftaran Hero
+                    </h3>
+                    <form id="demoForm" onsubmit="return prosesForm(event)" class="space-y-5">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-300 mb-1.5">Nama Hero <span class="text-red-500">*</span></label>
+                            <input type="text" id="fNama" placeholder="Contoh: Gatotkaca" required class="w-full p-3.5 bg-gray-800 text-white border border-gray-600 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/30 demo-input text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-300 mb-1.5">Email <span class="text-red-500">*</span></label>
+                            <input type="email" id="fEmail" placeholder="hero@example.com" required class="w-full p-3.5 bg-gray-800 text-white border border-gray-600 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/30 demo-input text-sm">
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-bold text-gray-300 mb-1.5">Umur</label>
+                                <input type="number" id="fUmur" placeholder="15" min="1" class="w-full p-3.5 bg-gray-800 text-white border border-gray-600 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/30 demo-input text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-gray-300 mb-1.5">Warna Kostum</label>
+                                <input type="color" id="fWarna" value="#E11D48" class="w-full h-[48px] bg-gray-800 border border-gray-600 rounded-xl cursor-pointer">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-300 mb-1.5">Tanggal Lahir</label>
+                            <input type="date" id="fTanggal" class="w-full p-3.5 bg-gray-800 text-white border border-gray-600 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/30 demo-input text-sm">
+                        </div>
+                        <button type="submit" class="w-full bg-gradient-to-r from-primary to-tertiary hover:from-rose-700 hover:to-rose-600 text-white font-black py-4 px-6 rounded-2xl shadow-xl hover:shadow-rose-500/30 transition-all text-lg">
+                            <i class="fas fa-paper-plane mr-2"></i> Daftarkan Hero!
+                        </button>
+                    </form>
+                </div>
+
+                <div class="space-y-6">
+                    <!-- Hasil Respon -->
+                    <div id="formRespon" class="glass-card p-8 rounded-3xl border border-green-500/30 min-h-[200px] flex flex-col items-center justify-center text-center">
+                        <i class="fas fa-robot text-6xl text-gray-600 mb-4"></i>
+                        <p class="text-gray-400 text-lg">Isi form di samping, lalu klik daftar! 🚀</p>
+                        <p class="text-gray-500 text-sm mt-2">Web akan "membaca" input dan memberi respon personal!</p>
+                    </div>
+
+                    <!-- Kode yang digunakan -->
+                    <div class="glass-card p-6 rounded-2xl border border-gray-700">
+                        <h4 class="text-sm font-bold text-primary mb-3 flex items-center gap-2">
+                            <i class="fas fa-code"></i> Kode yang dipakai
+                        </h4>
+                        <div class="code-preview text-xs p-4">
+<span class="js">function prosesForm(event) {</span>
+<br>&nbsp; <span class="js">event.preventDefault();</span>
+<br>&nbsp; <span class="js">let nama = document.getElementById('fNama').value;</span>
+<br>&nbsp; <span class="js">let email = document.getElementById('fEmail').value;</span>
+<br>&nbsp; <span class="comment">// ... ambil input lainnya</span>
+<br>&nbsp; <span class="js">alert('Halo ' + nama + '!');</span>
+<br><span class="js">}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Kode & Penjelasan -->
+        <section class="mb-24 reveal">
+            <div class="text-center mb-14">
+                <h2 class="text-4xl md:text-5xl font-black text-white mb-4">Struktur Form Lengkap</h2>
+                <p class="text-xl text-gray-400">Ini dia template form yang bisa langsung kamu pakai di playground!</p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-10 items-center">
+                <div class="code-preview text-sm leading-relaxed">
+<span class="doctype"><!DOCTYPE html></span>
+<br><<span class="tag">html</span> <span class="attr">lang</span>=<span class="val">"id"</span>>
+<br><<span class="tag">head</span>>
+<br>  <<span class="tag">title</span>>Form Biodata</<span class="tag">title</span>>
+<br></<span class="tag">head</span>>
+<br><<span class="tag">body</span>>
+<br>
+<br>  <<span class="tag">form</span>>
+<br>    <<span class="tag">label</span>>Nama:</<span class="tag">label</span>>
+<br>    <<span class="tag">input</span> <span class="attr">type</span>=<span class="val">"text"</span> <span class="attr">id</span>=<span class="val">"nama"</span> <span class="attr">required</span>>
+<br>
+<br>    <<span class="tag">label</span>>Email:</<span class="tag">label</span>>
+<br>    <<span class="tag">input</span> <span class="attr">type</span>=<span class="val">"email"</span> <span class="attr">id</span>=<span class="val">"email"</span>>
+<br>
+<br>    <<span class="tag">button</span> <span class="attr">type</span>=<span class="val">"submit"</span>>Kirim</<span class="tag">button</span>>
+<br>  </<span class="tag">form</span>>
+<br>
+<br>  <<span class="tag">script</span>>
+<br>    document.querySelector('form')
+<br>    .addEventListener('submit', function(e) {
+<br>      e.preventDefault();
+<br>      let nama = document.getElementById('nama').value;
+<br>      alert('Halo ' + nama + '!');
+<br>    });
+<br>  </<span class="tag">script</span>>
+<br>
+<br></<span class="tag">body</span>>
+<br></<span class="tag">html</span>>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="glass-card p-6 rounded-2xl border-l-4 border-yellow-500">
+                        <h4 class="font-bold text-white mb-2 flex items-center gap-2">
+                            <i class="fas fa-lightbulb text-yellow-400"></i> Pro Tips
+                        </h4>
+                        <ul class="text-gray-400 text-sm space-y-2">
+                            <li><i class="fas fa-check text-green-400 mr-2"></i>Selalu gunakan <code class="bg-black/30 px-1 rounded text-primary"><label></code> — membantu screen reader</li>
+                            <li><i class="fas fa-check text-green-400 mr-2"></i><code>required</code> mencegah form kosong dikirim</li>
+                            <li><i class="fas fa-check text-green-400 mr-2"></i><code>placeholder</code> memberi contoh isian</li>
+                            <li><i class="fas fa-check text-green-400 mr-2"></i>Gunakan <code>type="number"</code> untuk angka saja</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="glass-card p-6 rounded-2xl border border-gray-700">
+                        <h4 class="text-white font-bold mb-2">🔑 Rumus Ajaib:</h4>
+                        <div class="code-preview text-xs p-3 inline-block">
+document.getElementById('nama').value
+                        </div>
+                        <p class="text-gray-400 text-xs mt-2">Kode ini <strong>"mendengar"</strong> apa yang diketik user di input!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: Game Input Challenge -->
+        <section class="mb-24 reveal">
+            <div class="text-center mb-14">
+                <h2 class="text-4xl md:text-5xl font-black text-white mb-4">🎮 Tantangan: Input Challenge!</h2>
+                <p class="text-xl text-gray-400">Gabungkan input + onclick untuk membuat kalkulator umur!</p>
+            </div>
+
+            <div class="glass-card p-10 rounded-4xl border-2 border-primary/30 max-w-2xl mx-auto">
+                <h3 class="text-3xl font-black text-white mb-8 text-center">Kalkulator Umur 🎂</h3>
+                <div class="space-y-6">
+                    <input type="number" id="kalkTahun" placeholder="Masukkan tahun lahirmu (contoh: 2012)" class="w-full p-5 text-xl bg-gray-800 text-white border border-gray-600 rounded-2xl focus:border-primary focus:ring-2 focus:ring-primary/30 text-center demo-input">
+                    <button onclick="hitungUmur()" class="w-full bg-gradient-to-r from-primary to-tertiary hover:from-rose-700 hover:to-rose-600 text-white font-black py-5 px-8 rounded-2xl text-xl shadow-2xl hover:shadow-rose-500/30 transition-all">
+                        <i class="fas fa-cake-candles mr-2"></i> Hitung Umurku!
+                    </button>
+                    <div id="hasilUmur" class="p-8 bg-gray-800/50 rounded-2xl border border-gray-600 text-2xl font-bold text-center min-h-[100px] flex items-center justify-center">
+                        Masukkan tahun → Klik → Hasil! 🎉
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="reveal">
+            <div class="bg-gradient-to-r from-primary via-secondary to-tertiary rounded-4xl p-12 lg:p-16 text-center shadow-2xl relative overflow-hidden border-4 border-white/10">
+                <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzRjMC0yIDItNCA0LTRzNCAyIDQgNC0yIDQtNCA0LTQtMi00LTR6bTAtMjRjMC0yIDItNCA0LTRzNCAyIDQgNC0yIDQtNCA0LTQtMi00LTR6bS0yNCA0YzAtMiAyLTQgNC00czQgMiA0IDQtMiA0LTQgNC00LTItNC00eiIvPjwvZz48L2c+PC9zdmc+')] opacity-20"></div>
+                <div class="relative z-10">
+                    <div class="w-24 h-24 bg-white/20 backdrop-blur-sm rounded-3xl flex items-center justify-center mx-auto mb-8 border-2 border-white/30">
+                        <i class="fas fa-rocket text-4xl text-white"></i>
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-black text-white mb-6">🚀 Siap Praktek?</h2>
+                    <p class="text-white/90 text-xl mb-10 max-w-2xl mx-auto">
+                        Buka <strong>Playground</strong> dan buat form biodata dengan input teks, email, tanggal, dan tombol kirim!
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-5 justify-center">
+                        <a href="playground-1.html" class="px-10 py-5 bg-white text-primary font-black rounded-2xl shadow-2xl hover:scale-105 hover:bg-gray-100 transition-all flex items-center justify-center gap-3 text-lg">
+                            <i class="fas fa-laptop-code"></i> Buka Playground
+                        </a>
+                        <a href="index.php" class="px-10 py-5 bg-black/30 text-white font-black rounded-2xl border-2 border-white/30 hover:bg-black/50 transition-all flex items-center justify-center gap-3 text-lg">
+                            <i class="fas fa-home"></i> Kembali ke Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark-bg border-t border-primary/20 py-12 mt-16">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <div class="flex items-center justify-center gap-6 mb-6 text-2xl">
+                <i class="fab fa-html5 text-orange-500"></i>
+                <i class="fab fa-css3-alt text-blue-500"></i>
+                <i class="fab fa-js text-yellow-500 animate-pulse"></i>
+            </div>
+            <p class="text-gray-500 text-sm mb-2">© 2026 Nusabit Code Kitchen - Materi 9: Form Ajaib ✨</p>
+            <p class="text-xs text-gray-600">Dibuat untuk siswa SMP yang suka main sambil belajar! 🚀</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Form Demo Handler
+        function prosesForm(event) {
+            event.preventDefault();
+            
+            let nama = document.getElementById('fNama').value.trim();
+            let email = document.getElementById('fEmail').value.trim();
+            let umur = document.getElementById('fUmur').value;
+            let warna = document.getElementById('fWarna').value;
+            let tanggal = document.getElementById('fTanggal').value;
+
+            if (!nama || !email) {
+                document.getElementById('formRespon').innerHTML = `
+                    <i class="fas fa-exclamation-circle text-red-400 text-5xl mb-4"></i>
+                    <p class="text-red-300 font-bold text-xl">Nama & Email wajib diisi!</p>
+                `;
+                return;
+            }
+
+            let pesan = `
+                <div class="success-glow p-4 rounded-2xl">
+                    <i class="fas fa-check-circle text-green-400 text-5xl mb-4"></i>
+                    <p class="text-green-300 font-black text-2xl">Halo, ${nama}! 🎉</p>
+                    <div class="mt-4 space-y-2 text-gray-300 text-sm">
+                        <p>📧 Email: ${email}</p>
+                        ${umur ? `<p>🎂 Umur: ${umur} tahun</p>` : ''}
+                        ${tanggal ? `<p>📅 Lahir: ${tanggal}</p>` : ''}
+                        <p>🎨 Warna Kostum: <span style="color:${warna}; font-weight:bold;">■</span> ${warna}</p>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('formRespon').innerHTML = pesan;
+        }
+
+        // Kalkulator Umur
+        function hitungUmur() {
+            let tahun = parseInt(document.getElementById('kalkTahun').value);
+            let hasil = document.getElementById('hasilUmur');
+            
+            if (!tahun || tahun < 1900 || tahun > 2026) {
+                hasil.innerHTML = '<i class="fas fa-exclamation-triangle text-yellow-400 text-3xl mr-3"></i> Masukkan tahun valid (1900-2026)!';
+                hasil.classList.add('animate-shake');
+                setTimeout(() => hasil.classList.remove('animate-shake'), 500);
+                return;
+            }
+
+            let umur = 2026 - tahun;
+            let emoji = umur <= 12 ? '🧒' : umur <= 17 ? '🧑' : umur <= 30 ? '👨‍💼' : '👨‍👩‍👧‍👦';
+            
+            hasil.innerHTML = `
+                <span class="text-5xl block mb-3">${emoji}</span>
+                <span class="text-green-400">Umurmu: <strong class="text-5xl text-primary">${umur}</strong> tahun!</span>
+                <span class="block text-gray-400 text-sm mt-2">Lahir ${tahun}, sekarang 2026</span>
+            `;
+        }
+
+        // Reveal Animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
+

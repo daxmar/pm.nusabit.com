@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <link rel="icon" type="image/png" href="https://nusabit.com/assets/logo-48.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Path Finder - Learning Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#06B6D4',
+                        'dark-bg': '#111827',
+                        'card-bg': '#1F2937',
+                    },
+                    fontFamily: { sans: ['Poppins', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        .board-cell { transition: all 0.2s ease-in-out; aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 1px solid #374151; }
+        .robot-active { box-shadow: 0 0 15px rgba(6, 182, 212, 0.8); animation: pulse-robot 1.5s infinite; }
+        @keyframes pulse-robot { 0%, 100% { background-color: #06B6D4; } 50% { background-color: #38BDF8; } }
+        
+        .custom-scroll::-webkit-scrollbar { width: 10px; height: 10px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #0f172a; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 5px; border: 2px solid #0f172a; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #06B6D4; }
+
+        .line-numbers { text-align: right; padding-right: 15px; color: #4b5563; user-select: none; border-right: 1px solid #374151; }
+    </style>
+</head>
+<body class="bg-dark-bg text-gray-100 font-sans min-h-screen p-4">
+
+    <div id="tutorial-modal" class="fixed inset-0 bg-black/80 z-[100] flex items-center justify-center p-4">
+        <div class="bg-card-bg max-w-md w-full rounded-2xl border border-primary/50 p-6 shadow-2xl">
+            <div class="text-center mb-4">
+                <div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-3 text-primary text-2xl">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-white">Cara Bermain</h2>
+            </div>
+            <div class="space-y-4 text-sm text-gray-300">
+                <p class="flex items-start gap-3">
+                    <span class="bg-primary/20 text-primary px-2 py-1 rounded font-bold">1</span>
+                    Tujuanmu adalah menggerakkan <i class="fas fa-robot text-primary"></i> ke bendera <i class="fas fa-flag-checkered text-red-500"></i>.
+                </p>
+                <p class="flex items-start gap-3">
+                    <span class="bg-primary/20 text-primary px-2 py-1 rounded font-bold">2</span>
+                    Susun perintah (Atas, Bawah, Kiri, Kanan) di Editor Perintah.
+                </p>
+                <p class="flex items-start gap-3">
+                    <span class="bg-primary/20 text-primary px-2 py-1 rounded font-bold">3</span>
+                    Hati-hati! Jangan menabrak rintangan <i class="fas fa-bomb text-gray-500"></i> atau keluar batas area.
+                </p>
+                <p class="flex items-start gap-3 text-yellow-400 italic">
+                    <i class="fas fa-info-circle mt-1"></i>
+                    Gunakan tombol "Acak Ulang" jika jalur benar-benar tertutup oleh bom.
+                </p>
+            </div>
+            <button onclick="closeTutorial()" class="w-full mt-6 bg-primary hover:bg-cyan-500 text-dark-bg font-bold py-3 rounded-xl transition-all shadow-lg">
+                SAYA MENGERTI
+            </button>
+        </div>
+    </div>
+
+    <div id="app" class="max-w-6xl mx-auto">
+        <header class="text-center mb-6 py-4 border-b-2 border-primary/50">
+            <h1 class="text-3xl font-extrabold text-primary flex items-center justify-center space-x-3">
+                <i class="fas fa-robot"></i> <span>Code Path Finder</span>
+            </h1>
+            
+            <div class="flex justify-center gap-4 mt-2">
+                <button onclick="window.location.href='./';" class="hover:text-primary transition-colors" title="Kembali ke Home">
+                    <i class="fas fa-home"></i>
+                </button>
+                <button onclick="openVerificationModal()" class="px-3 py-1 bg-gray-800 hover:bg-gray-700 border border-primary/30 rounded-lg text-xs transition-all">
+                    <i class="fas fa-unlock-alt mr-2 text-primary"></i>Lihat Struktur Kode
+                </button>
+            </div>
+
+            <div class="flex justify-center space-x-8 mt-4">
+                <div class="text-center text-xs text-gray-400">Total Skor: <span id="total-score" class="text-lg font-bold text-yellow-400 ml-1">0</span></div>
+                <div class="text-center text-xs text-gray-400">Waktu: <span id="timer" class="text-lg font-bold text-red-400 ml-1">0s</span></div>
+                <div class="text-center text-xs text-gray-400">Level: <span id="level-display" class="text-lg font-bold text-green-400 ml-1">1</span></div>
+            </div>
+        </header>
+
+        <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2 bg-card-bg rounded-xl p-6 border border-gray-700">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-sm text-gray-400 italic">Target: Capai bendera merah!</span>
+                    <button onclick="generateLevel()" class="text-xs bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded-full transition-all">
+                        <i class="fas fa-sync-alt mr-1"></i> Acak Ulang Map
+                    </button>
+                </div>
+                
+                <div id="game-board" class="grid grid-cols-5 gap-1 mx-auto max-w-md bg-gray-700 p-1 rounded-md"></div>
+                <div id="status-message" class="mt-6 text-center text-lg p-3 rounded-lg bg-gray-800">Siapkan rute robotmu!</div>
+            </div>
+            
+            <div class="bg-card-bg rounded-xl p-6 border border-gray-700">
+                <h2 class="text-xl font-semibold mb-4 text-primary italic">Editor Perintah</h2>
+                <div class="grid grid-cols-2 gap-2 mb-6">
+                    <button onclick="addCommand('UP')" class="bg-indigo-600 hover:bg-indigo-700 p-2 rounded flex items-center justify-center gap-2 transition-transform active:scale-95"><i class="fas fa-arrow-up"></i> Atas</button>
+                    <button onclick="addCommand('DOWN')" class="bg-indigo-600 hover:bg-indigo-700 p-2 rounded flex items-center justify-center gap-2 transition-transform active:scale-95"><i class="fas fa-arrow-down"></i> Bawah</button>
+                    <button onclick="addCommand('LEFT')" class="bg-indigo-600 hover:bg-indigo-700 p-2 rounded flex items-center justify-center gap-2 transition-transform active:scale-95"><i class="fas fa-arrow-left"></i> Kiri</button>
+                    <button onclick="addCommand('RIGHT')" class="bg-indigo-600 hover:bg-indigo-700 p-2 rounded flex items-center justify-center gap-2 transition-transform active:scale-95"><i class="fas fa-arrow-right"></i> Kanan</button>
+                </div>
+                <div id="command-list" class="bg-gray-900 p-4 rounded-lg h-48 overflow-y-auto mb-6 border border-gray-700 custom-scroll">
+                    <p class="text-gray-500 italic text-sm" id="empty-message">Masukkan instruksi...</p>
+                </div>
+                <div class="flex space-x-2">
+                    <button onclick="runCode()" class="flex-1 bg-green-600 hover:bg-green-700 font-bold py-3 rounded-lg shadow-lg transition-all active:scale-95">JALANKAN</button>
+                    <button onclick="resetCommandsOnly()" class="bg-red-600 hover:bg-red-700 px-4 rounded-lg" title="Hapus Semua Perintah"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="verify-modal" class="fixed inset-0 bg-black/90 hidden z-[60] items-center justify-center p-4">
+        <div class="bg-card-bg p-8 rounded-2xl border border-primary/50 shadow-2xl max-w-sm w-full text-center">
+            <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 text-primary">
+                <i class="fas fa-user-shield text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2">Verifikasi Akses</h3>
+            <p class="text-gray-400 text-sm mb-6">Ketik <span class="text-primary font-mono italic">"akubisa"</span> untuk melihat struktur kode.</p>
+            <input type="text" id="pass-input" placeholder="Ketik di sini..." class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 text-center focus:outline-none focus:border-primary mb-4 transition-all">
+            <p id="verify-error" class="text-red-500 text-xs mb-4 hidden">Kata kunci salah!</p>
+            <div class="flex space-x-2">
+                <button onclick="closeVerifyModal()" class="flex-1 py-2 text-gray-400 hover:text-white transition-colors">Batal</button>
+                <button onclick="checkPass()" class="flex-1 py-2 bg-primary hover:bg-cyan-500 text-gray-900 font-bold rounded-lg transition-all">Lanjut</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="code-modal" class="fixed inset-0 bg-black/90 hidden z-[70] p-4 md:p-8">
+        <div class="max-w-5xl mx-auto h-full flex flex-col bg-[#0d1117] rounded-xl border border-gray-700 shadow-2xl overflow-hidden">
+            <div class="flex justify-between items-center p-4 border-b border-gray-700 bg-gray-900">
+                <span class="text-xs font-mono text-gray-400"><i class="fas fa-file-code mr-2"></i>source_code.html</span>
+                <button onclick="closeCodeModal()" class="text-gray-400 hover:text-white"><i class="fas fa-times fa-lg"></i></button>
+            </div>
+            <div class="flex-1 overflow-auto custom-scroll flex bg-[#0d1117]">
+                <div id="line-numbers" class="line-numbers py-6 px-4 font-mono text-sm leading-6"></div>
+                <div class="py-6 px-4 flex-1">
+                    <pre id="code-content" class="text-blue-300 font-mono text-sm leading-6 whitespace-pre"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const gridSize = 5;
+        let map = [], commands = [], isRunning = false;
+        let currentX, currentY, startX, startY, totalScore = 0, level = 1, timerInterval;
+
+        /** FUNGSI MODAL TUTORIAL **/
+        function closeTutorial() {
+            document.getElementById('tutorial-modal').classList.add('hidden');
+            generateLevel();
+        }
+
+        function generateLevel() {
+            if (isRunning) return;
+            map = Array.from({ length: gridSize }, () => Array(gridSize).fill(0));
+            startX = 0; startY = 0; 
+            map[startY][startX] = 'S';
+            map[4][4] = 'E';
+
+            let obstacles = 0;
+            const maxObstacles = 6;
+            while (obstacles < maxObstacles) {
+                let rx = Math.floor(Math.random() * gridSize);
+                let ry = Math.floor(Math.random() * gridSize);
+                if (map[ry][rx] === 0) {
+                    map[ry][rx] = 1;
+                    obstacles++;
+                }
+            }
+            currentX = startX; currentY = startY;
+            updateStatus("Level Dimulai! Susun perintahmu.", "bg-gray-800 text-gray-300");
+            resetTimer(); startTimer(); renderBoard();
+        }
+
+        function startTimer() {
+            let sec = 0; 
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => { 
+                sec++; 
+                document.getElementById('timer').textContent = sec + "s"; 
+            }, 1000);
+        }
+
+        function resetTimer() { 
+            clearInterval(timerInterval); 
+            document.getElementById('timer').textContent = "0s"; 
+        }
+
+        function renderBoard() {
+            const boardEl = document.getElementById('game-board');
+            boardEl.innerHTML = '';
+            for (let i = 0; i < gridSize; i++) {
+                for (let j = 0; j < gridSize; j++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'board-cell bg-card-bg';
+                    if (map[i][j] === 'S') cell.innerHTML = '<i class="fas fa-home text-green-400"></i>';
+                    else if (map[i][j] === 'E') cell.innerHTML = '<i class="fas fa-flag-checkered text-red-500"></i>';
+                    else if (map[i][j] === 1) cell.innerHTML = '<i class="fas fa-bomb text-gray-500 text-xs"></i>';
+                    
+                    if (i === currentY && j === currentX) {
+                        cell.innerHTML = '<i class="fas fa-robot text-lg text-white"></i>';
+                        cell.classList.add('bg-primary', 'robot-active');
+                    }
+                    boardEl.appendChild(cell);
+                }
+            }
+        }
+
+        async function runCode() {
+            if (isRunning || commands.length === 0) return;
+            isRunning = true;
+            currentX = startX; currentY = startY; 
+            renderBoard();
+
+            for (let cmd of commands) {
+                if (cmd === 'UP') currentY--; 
+                else if (cmd === 'DOWN') currentY++;
+                else if (cmd === 'LEFT') currentX--; 
+                else if (cmd === 'RIGHT') currentX++;
+
+                if (currentX < 0 || currentX >= gridSize || currentY < 0 || currentY >= gridSize || map[currentY][currentX] === 1) {
+                    updateStatus("GAGAL! Robot hancur menabrak rintangan!", "bg-red-700 text-white font-bold"); 
+                    isRunning = false; return;
+                }
+
+                renderBoard(); 
+                await new Promise(r => setTimeout(r, 400));
+
+                if (map[currentY][currentX] === 'E') {
+                    clearInterval(timerInterval);
+                    totalScore += 500; 
+                    document.getElementById('total-score').textContent = totalScore;
+                    updateStatus(`LEVEL CLEAR! Bersiap untuk Level ${++level}`, "bg-green-700 text-white font-bold");
+                    setTimeout(() => { 
+                        document.getElementById('level-display').textContent = level; 
+                        commands = []; renderCommands(); generateLevel(); 
+                        isRunning = false; 
+                    }, 1500);
+                    return;
+                }
+            }
+            updateStatus("GAGAL! Robot tidak mencapai bendera.", "bg-red-700 text-white font-bold"); 
+            isRunning = false;
+        }
+
+        function addCommand(cmd) { if(!isRunning) { commands.push(cmd); renderCommands(); } }
+        function resetCommandsOnly() { if(!isRunning) { commands = []; renderCommands(); } }
+        
+        function renderCommands() {
+            const list = document.getElementById('command-list');
+            list.innerHTML = commands.length ? '' : '<p class="text-gray-500 italic text-sm">Masukkan instruksi...</p>';
+            commands.forEach((c, i) => {
+                const item = document.createElement('div');
+                item.className = "text-xs bg-gray-800 p-2 mb-1 rounded border-l-2 border-primary font-mono flex justify-between";
+                item.innerHTML = `<span>${i+1}. ${c}</span><i class="fas fa-code text-gray-600"></i>`;
+                list.appendChild(item);
+            });
+            list.scrollTop = list.scrollHeight;
+        }
+
+        function updateStatus(msg, cls) {
+            const s = document.getElementById('status-message');
+            s.textContent = msg; 
+            s.className = `mt-6 text-center text-lg p-3 rounded-lg ${cls} transition-all duration-500`;
+        }
+
+        function openVerificationModal() { document.getElementById('verify-modal').classList.replace('hidden', 'flex'); }
+        function closeVerifyModal() { document.getElementById('verify-modal').classList.replace('flex', 'hidden'); }
+        function checkPass() {
+            if (document.getElementById('pass-input').value.toLowerCase() === "akubisa") {
+                closeVerifyModal(); openCodeModal();
+            } else {
+                document.getElementById('verify-error').classList.remove('hidden');
+            }
+        }
+        function openCodeModal() {
+            const content = document.getElementById('code-content');
+            const fullCode = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+            content.textContent = fullCode;
+            const lines = fullCode.split('\n');
+            document.getElementById('line-numbers').innerHTML = lines.map((_, i) => `<div>${i + 1}</div>`).join('');
+            document.getElementById('code-modal').classList.remove('hidden');
+        }
+        function closeCodeModal() { document.getElementById('code-modal').classList.add('hidden'); }
+    </script>
+</body>
+</html>

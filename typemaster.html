@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulasi Latihan Pengetikan Profesional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+        .text-mono {
+            font-family: 'Roboto Mono', monospace;
+        }
+        .key {
+            user-select: none;
+            cursor: pointer;
+            box-shadow: 0 4px 0 0 rgb(31 41 55);
+            transition: all 0.05s ease;
+        }
+        .key:active, .key.pressed {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 0 rgb(31 41 55);
+        }
+        .correct-char {
+            color: #4ade80; /* Green 400 */
+        }
+        .incorrect-char {
+            background-color: #f87171; /* Red 400 */
+            color: #ffffff;
+            border-radius: 2px;
+        }
+        .cursor-char {
+            background-color: #fcd34d; /* Yellow 300 */
+            color: #1f2937;
+            border-radius: 2px;
+            animation: blink 1s step-start 0s infinite;
+        }
+        @keyframes blink {
+            50% { background-color: transparent; color: inherit; }
+        }
+        .key.highlight {
+            background-color: #fcd34d !important;
+            color: #1f2937 !important;
+            border-color: #f59e0b !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen p-4 md:p-8 flex flex-col items-center">
+
+    <header class="text-center mb-8">
+        <h2 class="text-4xl font-bold text-yellow-300">TypeMaster</h2>
+        <p class="text-gray-400 mt-2">Simulasi Latihan Pengetikan QWERTY Interaktif</p>
+        <a href="/index.php" class="inline-block mt-4 md:mt-0 bg-blue-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded transition duration-200">
+    kembali ke home
+</a>
+    </header>
+
+    <div class="w-full max-w-5xl mb-6 bg-gray-800 p-4 rounded-lg shadow-xl flex justify-between items-center flex-wrap">
+        <div class="flex space-x-6">
+            <div class="text-center">
+                <p class="text-sm text-gray-400">WPM</p>
+                <p id="wpm-display" class="text-3xl font-bold text-green-400">0</p>
+            </div>
+            <div class="text-center">
+                <p class="text-sm text-gray-400">Akurasi</p>
+                <p id="accuracy-display" class="text-3xl font-bold text-blue-400">100%</p>
+            </div>
+            <div class="text-center">
+                <p class="text-sm text-gray-400">Kesalahan</p>
+                <p id="errors-display" class="text-3xl font-bold text-red-400">0</p>
+            </div>
+        </div>
+        
+        <button id="reset-button" class="mt-4 md:mt-0 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded transition duration-200">
+            Ulangi Tes
+        </button>
+    </div>
+
+    <div class="w-full max-w-5xl bg-gray-800 p-8 rounded-lg shadow-2xl mb-8 border-t-4 border-yellow-500">
+        <div id="text-display" class="text-2xl text-mono leading-relaxed h-auto min-h-[8rem] focus:outline-none">
+            </div>
+        <input type="text" id="typing-input" class="absolute opacity-0 pointer-events-none" autofocus autocomplete="off">
+    </div>
+    
+    <div class="w-full max-w-5xl bg-gray-800 p-6 rounded-lg shadow-xl hidden md:block">
+        <div id="keyboard-visualizer" class="space-y-1">
+            <div class="flex justify-center space-x-1">
+                <div data-key="Backquote" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-sm">`</div>
+                <div data-key="Digit1" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-sm">1</div>
+                <div data-key="Digit2" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-sm">2</div>
+                <div data-key="Digit3" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-sm">3</div>
+                <div data-key="Digit4" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-sm">4</div>
+                <div data-key="Digit5" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-sm">5</div>
+                <div data-key="Digit6" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-sm">6</div>
+                <div data-key="Digit7" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-sm">7</div>
+                <div data-key="Digit8" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-sm">8</div>
+                <div data-key="Digit9" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-sm">9</div>
+                <div data-key="Digit0" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-sm">0</div>
+                <div data-key="Minus" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-sm">-</div>
+                <div data-key="Equal" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-sm">=</div>
+                <div data-key="Backspace" class="key w-20 h-10 bg-gray-700 rounded flex items-center justify-center text-xs">Backspace</div>
+            </div>
+            <div class="flex justify-center space-x-1">
+                <div data-key="Tab" class="key w-14 h-10 bg-gray-700 rounded flex items-center justify-center text-xs">Tab</div>
+                <div data-key="KeyQ" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-base">Q</div>
+                <div data-key="KeyW" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-base">W</div>
+                <div data-key="KeyE" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-base">E</div>
+                <div data-key="KeyR" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-base">R</div>
+                <div data-key="KeyT" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-base">T</div>
+                <div data-key="KeyY" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-base">Y</div>
+                <div data-key="KeyU" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-base">U</div>
+                <div data-key="KeyI" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-base">I</div>
+                <div data-key="KeyO" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-base">O</div>
+                <div data-key="KeyP" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-base">P</div>
+                <div data-key="BracketLeft" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-sm">[</div>
+                <div data-key="BracketRight" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-sm">]</div>
+                <div data-key="Backslash" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-sm">\</div>
+            </div>
+            <div class="flex justify-center space-x-1">
+                <div data-key="CapsLock" class="key w-16 h-10 bg-gray-700 rounded flex items-center justify-center text-xs">Caps</div>
+                <div data-key="KeyA" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-base">A</div>
+                <div data-key="KeyS" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-base">S</div>
+                <div data-key="KeyD" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-base">D</div>
+                <div data-key="KeyF" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-base">F</div>
+                <div data-key="KeyG" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-base">G</div>
+                <div data-key="KeyH" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-base">H</div>
+                <div data-key="KeyJ" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-base">J</div>
+                <div data-key="KeyK" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-base">K</div>
+                <div data-key="KeyL" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-base">L</div>
+                <div data-key="Semicolon" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-sm">;</div>
+                <div data-key="Quote" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-sm">'</div>
+                <div data-key="Enter" class="key w-20 h-10 bg-gray-700 rounded flex items-center justify-center text-xs">Enter</div>
+            </div>
+            <div class="flex justify-center space-x-1">
+                <div data-key="ShiftLeft" class="key w-20 h-10 bg-gray-700 rounded flex items-center justify-center text-xs">Shift</div>
+                <div data-key="KeyZ" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-base">Z</div>
+                <div data-key="KeyX" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-base">X</div>
+                <div data-key="KeyC" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-base">C</div>
+                <div data-key="KeyV" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-base">V</div>
+                <div data-key="KeyB" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-base">B</div>
+                <div data-key="KeyN" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-base">N</div>
+                <div data-key="KeyM" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-base">M</div>
+                <div data-key="Comma" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-sm">,</div>
+                <div data-key="Period" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-sm">.</div>
+                <div data-key="Slash" class="key w-10 h-10 bg-gray-700 rounded flex items-center justify-center text-sm">/</div>
+                <div data-key="ShiftRight" class="key w-24 h-10 bg-gray-700 rounded flex items-center justify-center text-xs">Shift</div>
+            </div>
+            <div class="flex justify-center space-x-1">
+                <div data-key="ControlLeft" class="key w-14 h-10 bg-gray-700 rounded flex items-center justify-center text-xs">Ctrl</div>
+                <div data-key="AltLeft" class="key w-12 h-10 bg-gray-700 rounded flex items-center justify-center text-xs">Alt</div>
+                <div data-key="Space" class="key w-80 h-10 bg-gray-700 rounded flex items-center justify-center"></div>
+                <div data-key="AltRight" class="key w-12 h-10 bg-gray-700 rounded flex items-center justify-center text-xs">Alt</div>
+                <div data-key="ControlRight" class="key w-14 h-10 bg-gray-700 rounded flex items-center justify-center text-xs">Ctrl</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const targetText = "ketika kita melihat ke masa depan, penting untuk diingat bahwa teknologi bukanlah tujuan akhir, melainkan alat yang memungkinkan kita mencapai potensi penuh sebagai manusia. fokus pada pembelajaran berkelanjutan, adaptasi cepat, dan inovasi adalah kunci untuk menavigasi lanskap digital yang terus berubah dengan sukses dan integritas. ketik cepat dan tepat untuk menang!";
+        
+        const $textDisplay = document.getElementById('text-display');
+        const $typingInput = document.getElementById('typing-input');
+        const $wpmDisplay = document.getElementById('wpm-display');
+        const $accuracyDisplay = document.getElementById('accuracy-display');
+        const $errorsDisplay = document.getElementById('errors-display');
+        const $resetButton = document.getElementById('reset-button');
+        const $keyboardKeys = document.querySelectorAll('.key');
+
+        let currentIndex = 0;
+        let errors = 0;
+        let startTime = null;
+        let isStarted = false;
+        let totalTypedCharacters = 0;
+        let timerInterval = null;
+
+        function initializeTest() {
+            currentIndex = 0;
+            errors = 0;
+            startTime = null;
+            isStarted = false;
+            totalTypedCharacters = 0;
+            clearInterval(timerInterval);
+            
+            $wpmDisplay.textContent = '0';
+            $accuracyDisplay.textContent = '100%';
+            $errorsDisplay.textContent = '0';
+            $typingInput.value = '';
+            
+            renderText();
+            highlightNextKey();
+            $typingInput.focus();
+        }
+
+        function renderText() {
+            let htmlContent = '';
+            const typedText = $typingInput.value;
+            
+            for (let i = 0; i < targetText.length; i++) {
+                const char = targetText[i];
+                
+                if (i < currentIndex) {
+                    if (typedText[i] === char) {
+                        htmlContent += `<span class="correct-char">${char}</span>`;
+                    } else {
+                        // Jika salah ketik, tampilkan karakter asli dengan background merah
+                        htmlContent += `<span class="incorrect-char">${char}</span>`;
+                    }
+                } else if (i === currentIndex) {
+                    htmlContent += `<span class="cursor-char">${char}</span>`;
+                } else {
+                    htmlContent += `<span class="text-gray-500">${char}</span>`;
+                }
+            }
+            $textDisplay.innerHTML = htmlContent;
+        }
+
+        function updateStats() {
+            if (!isStarted || !startTime) return;
+
+            const timeElapsed = (new Date().getTime() - startTime) / 60000;
+            if (timeElapsed <= 0) return;
+
+            const wpm = Math.round((totalTypedCharacters / 5) / timeElapsed);
+            const accuracy = totalTypedCharacters > 0 
+                ? Math.round(((totalTypedCharacters - errors) / totalTypedCharacters) * 100) 
+                : 100;
+            
+            $wpmDisplay.textContent = Math.max(0, wpm);
+            $accuracyDisplay.textContent = `${Math.max(0, accuracy)}%`;
+            $errorsDisplay.textContent = errors;
+        }
+        
+        function finishTest() {
+            isStarted = false;
+            clearInterval(timerInterval);
+            $textDisplay.innerHTML += `<p class="mt-4 text-green-400 font-bold">Tes Selesai! Skor Akhir: ${$wpmDisplay.textContent} WPM</p>`;
+            $keyboardKeys.forEach(key => key.classList.remove('highlight'));
+        }
+
+        function highlightNextKey() {
+            $keyboardKeys.forEach(key => key.classList.remove('highlight'));
+            if (currentIndex >= targetText.length) return;
+
+            const requiredChar = targetText[currentIndex];
+            const requiredCode = mapCharToKey(requiredChar);
+
+            if (requiredCode) {
+                const keyElement = document.querySelector(`[data-key="${requiredCode}"]`);
+                if (keyElement) keyElement.classList.add('highlight');
+                
+                if (isShiftRequired(requiredChar)) {
+                    document.querySelector('[data-key="ShiftLeft"]').classList.add('highlight');
+                    document.querySelector('[data-key="ShiftRight"]').classList.add('highlight');
+                }
+            }
+        }
+        
+        function mapCharToKey(char) {
+            const charMap = {
+                ' ': 'Space', ',': 'Comma', '.': 'Period', '/': 'Slash',
+                ';': 'Semicolon', "'": 'Quote', '[': 'BracketLeft',
+                ']': 'BracketRight', '\\': 'Backslash', '-': 'Minus',
+                '=': 'Equal', '`': 'Backquote', '!': 'Digit1', '@': 'Digit2',
+                '#': 'Digit3', '$': 'Digit4', '%': 'Digit5', '^': 'Digit6',
+                '&': 'Digit7', '*': 'Digit8', '(': 'Digit9', ')': 'Digit0'
+            };
+            if (char.toUpperCase() !== char.toLowerCase() && char !== ' ') return 'Key' + char.toUpperCase();
+            return charMap[char] || null;
+        }
+        
+        function isShiftRequired(char) {
+            return /[A-Z!@#$%^&*()_+{}|:"<>?~]/.test(char);
+        }
+
+        // --- Event Listeners ---
+
+        document.addEventListener('keydown', (e) => {
+            const keyElement = document.querySelector(`[data-key="${e.code}"]`);
+            if (keyElement) keyElement.classList.add('pressed');
+
+            if (e.metaKey || e.ctrlKey || e.altKey) return;
+            
+            if (!isStarted && e.key.length === 1) {
+                startTime = new Date().getTime();
+                isStarted = true;
+                timerInterval = setInterval(updateStats, 1000);
+            }
+
+            // PENTING: Jangan gunakan preventDefault pada spasi agar input terisi
+            $typingInput.focus();
+        });
+        
+        document.addEventListener('keyup', (e) => {
+            const keyElement = document.querySelector(`[data-key="${e.code}"]`);
+            if (keyElement) keyElement.classList.remove('pressed');
+        });
+
+        $typingInput.addEventListener('input', (e) => {
+            if (!isStarted) return;
+            
+            const typedValue = e.target.value;
+            
+            // Hitung ulang index dan error berdasarkan panjang input saat ini
+            if (typedValue.length < currentIndex) {
+                // User melakukan backspace
+                currentIndex = typedValue.length;
+            } else {
+                // User mengetik karakter baru
+                const lastCharTyped = typedValue[typedValue.length - 1];
+                const expectedChar = targetText[currentIndex];
+                
+                totalTypedCharacters++;
+                if (lastCharTyped !== expectedChar) {
+                    errors++;
+                }
+                currentIndex = typedValue.length;
+            }
+
+            renderText();
+            updateStats();
+            highlightNextKey();
+            
+            if (currentIndex === targetText.length) finishTest();
+        });
+        
+        $resetButton.addEventListener('click', initializeTest);
+
+        window.onload = initializeTest;
+    </script>
+</body>
+</html>

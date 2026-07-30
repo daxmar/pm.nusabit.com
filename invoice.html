@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Bulanan - app.nusabit.com</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 40px;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .invoice-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 20px;
+        }
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .invoice-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        .company-info {
+            text-align: right;
+            line-height: 1.6;
+        }
+        .company-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .invoice-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+        .details-group {
+            flex: 1;
+        }
+        .details-group h3 {
+            margin: 0 0 15px 0;
+            color: #555;
+            font-size: 16px;
+        }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .table-container {
+            margin-bottom: 40px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+        .total-row {
+            font-size: 18px;
+            font-weight: bold;
+            border-top: 2px solid #007bff;
+        }
+        .total-amount {
+            color: #007bff;
+            font-size: 22px;
+        }
+        .footer {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 2px dashed #ddd;
+            color: #666;
+            font-size: 14px;
+            position: relative;
+        }
+        .paid-stamp {
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: rotate(-15deg) translateY(-50%);
+            font-size: 48px;
+            font-weight: bold;
+            color: rgba(17, 42, 122, 0.3);
+            font-family: 'Courier New', monospace;
+            z-index: 10;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+        }
+        .print-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .print-btn:hover {
+            background: #218838;
+        }
+@media print {
+            .print-btn { display: none !important; }
+            .paid-stamp { opacity: 0.2; }
+            #print-date {
+                font-weight: bold !important;
+                font-size: 14px !important;
+                color: black !important;
+            }
+            body { background: white; padding: 20px; }
+            .invoice-container { box-shadow: none; }
+        }
+        @media (max-width: 600px) {
+            body { padding: 20px; }
+            .invoice-container { padding: 20px; }
+            .header { flex-direction: column; text-align: center; }
+            .invoice-details { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice-container">
+<div class="header">
+            <img src="https://nusabit.com/assets/logo-500.png" alt="Nusabit Logo" style="height: 60px; width: auto;">
+            <div>
+                <div class="invoice-title">INVOICE </div>
+<div id="invoice-number">No. INV-2024-0004</div>
+            </div>
+        </div>
+
+        <div class="company-info">
+            <div class="company-name">Nusabit.com</div>
+            <div>Jl. Parangtritis Km.10</div>
+            <div>Bantul, Daerah Istimewa Yogyakarta</div>
+            <div>Email: billing@nusabit.com</div>
+        </div>
+
+        <div class="invoice-details">
+            <div class="details-group">
+                <h3>Faktur Untuk</h3>
+                <div class="detail-row">
+                    <span>Pelanggan:</span>
+                    <span>Brq Dagmar</span>
+                </div>
+                <div class="detail-row">
+                    <span>Email:</span>
+                    <span>brqdagmar@gmail.com</span>
+                </div>
+                <div class="detail-row">
+                    <span>Periode Bulan:</span>
+                    <span id="current-month"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Keterangan</th>
+                        <th>Harga (IDR)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Langganan bulanan hosting domain app.nusabit.com</td>
+                        <td>Rp 99.000</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="total-row">
+                        <td>Total</td>
+                        <td class="total-amount">Rp 99.000</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="footer">
+            <div class="paid-stamp">SUDAH LUNAS</div>
+            <p>Terima kasih atas kepercayaan Anda kepada Nusabit.com.</p>
+            <p>Invoice ini sah dan dapat digunakan untuk keperluan pembayaran.</p>
+            <p style="margin-top: 20px; font-size: 12px;">Dicetak pada: <span id="print-date"></span></p>
+            <button class="print-btn" onclick="updateInvoice(); window.print();">🖨️ Cetak Invoice</button>
+        </div>
+    </div>
+
+    <script>
+        function updateInvoice() {
+            document.getElementById('current-month').textContent = new Date().toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
+            document.getElementById('print-date').textContent = new Date().toLocaleDateString('id-ID');
+            
+            const year = new Date().getFullYear();
+            const randomNum = Math.floor(Math.random() * 97) + 4;
+            const randomStr = String(randomNum).padStart(4, '0');
+            document.getElementById('invoice-number').textContent = `No. INV-${year}-${randomStr}`;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateInvoice();
+        });
+
+        window.onload = function() {
+            updateInvoice();
+        };
+    </script>
+</body>
+</html>

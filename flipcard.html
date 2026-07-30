@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Flip - Asah Otak</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+    </style>
+</head>
+<body class="bg-slate-900 min-h-screen flex flex-col items-center justify-center p-4 text-white">
+
+    <div class="w-full max-w-md">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-6">
+            <a href="index.php" class="text-slate-400 hover:text-white transition-colors">
+                <i class="fa-solid fa-arrow-left mr-2"></i>Home
+            </a>
+            <h1 class="text-2xl font-bold text-indigo-400">Memory Flip</h1>
+        </div>
+
+        <!-- Stats -->
+        <div class="bg-slate-800 rounded-xl p-4 mb-6 flex justify-between items-center shadow-lg border border-slate-700">
+            <div class="text-center">
+                <p class="text-xs text-slate-400 uppercase">Langkah</p>
+                <p id="moves" class="text-xl font-bold text-white">0</p>
+            </div>
+            <div class="text-center">
+                <p class="text-xs text-slate-400 uppercase">Waktu</p>
+                <p id="timer" class="text-xl font-bold text-yellow-400">00:00</p>
+            </div>
+            <button onclick="restartGame()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors">
+                <i class="fa-solid fa-rotate-right"></i> Reset
+            </button>
+        </div>
+
+        <!-- Game Grid -->
+        <div id="game-grid" class="grid grid-cols-4 gap-3 mb-6 perspective-1000">
+            <!-- Cards will be generated here -->
+        </div>
+
+        <!-- Win Message -->
+        <div id="win-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50 backdrop-blur-sm">
+            <div class="bg-slate-800 p-8 rounded-2xl text-center border border-indigo-500/50 shadow-2xl max-w-sm mx-4 transform scale-100 transition-transform">
+                <div class="w-20 h-20 bg-green-500/20 text-green-400 rounded-full flex items-center justify-center mx-auto mb-4 text-4xl animate-bounce">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-white mb-2">Hebat!</h2>
+                <p class="text-slate-300 mb-6">Kamu menyelesaikan permainan dalam <span id="final-moves" class="text-white font-bold">0</span> langkah dan waktu <span id="final-time" class="text-white font-bold">00:00</span>.</p>
+                <button onclick="restartGame()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-3 rounded-xl font-bold transition-all shadow-lg hover:shadow-indigo-500/25">
+                    Main Lagi
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const grid = document.getElementById('game-grid');
+        const movesDisplay = document.getElementById('moves');
+        const timerDisplay = document.getElementById('timer');
+        const winModal = document.getElementById('win-modal');
+        
+        // Icons for cards (FontAwesome classes)
+        const icons = [
+            'fa-ghost', 'fa-dragon', 'fa-jet-fighter', 'fa-robot',
+            'fa-gamepad', 'fa-rocket', 'fa-puzzle-piece', 'fa-brain'
+        ];
+
+        let cards = [];
+        let flippedCards = [];
+        let matchedPairs = 0;
+        let moves = 0;
+        let timer = null;
+        let seconds = 0;
+        let isLocked = false;
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function formatTime(secs) {
+            const mins = Math.floor(secs / 60);
+            const remainingSecs = secs % 60;
+            return `${mins.toString().padStart(2, '0')}:${remainingSecs.toString().padStart(2, '0')}`;
+        }
+
+        function startTimer() {
+            stopTimer();
+            seconds = 0;
+            timerDisplay.innerText = "00:00";
+            timer = setInterval(() => {
+                seconds++;
+                timerDisplay.innerText = formatTime(seconds);
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timer);
+        }
+
+        function createCard(icon) {
+            const card = document.createElement('div');
+            card.className = 'relative w-full aspect-square cursor-pointer transform-style-3d transition-transform duration-500 group';
+            card.dataset.icon = icon;
+
+            // Front (Hidden state - shows pattern/logo)
+            const front = document.createElement('div');
+            front.className = 'absolute inset-0 bg-slate-700 rounded-xl border-2 border-slate-600 flex items-center justify-center backface-hidden group-hover:border-indigo-400 transition-colors';
+            front.innerHTML = '<i class="fa-solid fa-question text-slate-500 text-2xl"></i>';
+
+            // Back (Revealed state - shows icon)
+            const back = document.createElement('div');
+            back.className = 'absolute inset-0 bg-indigo-600 rounded-xl border-2 border-indigo-400 flex items-center justify-center backface-hidden rotate-y-180 shadow-lg shadow-indigo-500/20';
+            back.innerHTML = `<i class="fa-solid ${icon} text-white text-3xl md:text-4xl drop-shadow-md"></i>`;
+
+            card.appendChild(front);
+            card.appendChild(back);
+
+            card.addEventListener('click', () => flipCard(card));
+            return card;
+        }
+
+        function flipCard(card) {
+            if (isLocked || card.classList.contains('rotate-y-180')) return;
+
+            if (moves === 0 && seconds === 0) startTimer();
+
+            card.classList.add('rotate-y-180');
+            flippedCards.push(card);
+
+            if (flippedCards.length === 2) {
+                moves++;
+                movesDisplay.innerText = moves;
+                checkMatch();
+            }
+        }
+
+        function checkMatch() {
+            isLocked = true;
+            const [card1, card2] = flippedCards;
+            const match = card1.dataset.icon === card2.dataset.icon;
+
+            if (match) {
+                matchedPairs++;
+                flippedCards = [];
+                isLocked = false;
+                
+                // Visual feedback for match
+                setTimeout(() => {
+                    card1.children[1].classList.remove('bg-indigo-600', 'border-indigo-400');
+                    card1.children[1].classList.add('bg-green-500', 'border-green-400');
+                    card2.children[1].classList.remove('bg-indigo-600', 'border-indigo-400');
+                    card2.children[1].classList.add('bg-green-500', 'border-green-400');
+                }, 300);
+
+                if (matchedPairs === icons.length) {
+                    stopTimer();
+                    setTimeout(() => {
+                        document.getElementById('final-moves').innerText = moves;
+                        document.getElementById('final-time').innerText = formatTime(seconds);
+                        winModal.classList.remove('hidden');
+                    }, 800);
+                }
+            } else {
+                setTimeout(() => {
+                    card1.classList.remove('rotate-y-180');
+                    card2.classList.remove('rotate-y-180');
+                    flippedCards = [];
+                    isLocked = false;
+                }, 1000);
+            }
+        }
+
+        function restartGame() {
+            winModal.classList.add('hidden');
+            grid.innerHTML = '';
+            cards = [];
+            flippedCards = [];
+            matchedPairs = 0;
+            moves = 0;
+            movesDisplay.innerText = '0';
+            stopTimer();
+            timerDisplay.innerText = '00:00';
+            isLocked = false;
+
+            // Create pairs
+            const gameIcons = [...icons, ...icons];
+            shuffle(gameIcons);
+
+            gameIcons.forEach(icon => {
+                const card = createCard(icon);
+                grid.appendChild(card);
+            });
+        }
+
+        // Init
+        restartGame();
+
+    </script>
+</body>
+</html>

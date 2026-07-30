@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tugas Notepad - Buat HTML Manual!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gradient-to-br from-slate-900 to-gray-800 min-h-screen text-white p-8">
+    <div class="max-w-4xl mx-auto">
+        <header class="text-center mb-20">
+            <div class="w-32 h-32 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl border-8 border-white/30">
+                <i class="fas fa-edit text-4xl text-white font-bold"></i>
+            </div>
+            <h1 class="text-6xl font-black mb-6 bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent">
+                Tugas Notepad Mastery
+            </h1>
+<p class="text-2xl text-gray-300 mb-12 max-w-2xl mx-auto">(Buat HTML dari NOL pakai Notepad ++! Langkah demi langkah + checklist!)</p>
+        </header>
+
+        <main class="space-y-12">
+            <!-- Step-by-Step Guide -->
+            <section class="glass-card p-12 rounded-5xl shadow-2xl border border-green-400/50 backdrop-blur-xl">
+                <h2 class="text-4xl font-black mb-12 text-center text-white flex items-center justify-center gap-6">
+                    <i class="fas fa-list-ol text-green-400 text-5xl"></i> 6 Langkah Buat HTML
+                </h2>
+                <ol class="space-y-6 text-xl max-w-3xl mx-auto">
+<li class="step-item flex items-start gap-6 p-6 bg-white/10 rounded-4xl border-l-4 border-green-400 hover:bg-white/20 transition-all group cursor-pointer" onclick="stepComplete(1)">
+                        <div class="w-12 h-12 bg-green-500 rounded-2xl flex items-center justify-center font-bold text-2xl text-white flex-shrink-0 group-hover:scale-110 transition-all">1</div>
+                        <div>
+                            <h3 class="text-2xl font-bold mb-3 group-hover:text-green-400 transition-all">Install Notepad++ </h3>
+                            <p class="text-gray-300 mb-4">1. Buka browser → googling "download notepad++" <br>2. Download dari <strong>notepad-plus-plus.org</strong> <br>3. Install (Next → Next → Finish) <br>4. Buka: Win+R → <code class="bg-black px-3 py-1 rounded font-mono text-green-400">notepad++</code></p>
+                            <div class="mt-3 w-full bg-gray-700 rounded-full h-3">
+                                <div class="bg-green-500 h-3 rounded-full w-0 step-progress-1 transition-all" style="width:0%"></div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="step-item flex items-start gap-6 p-6 bg-white/10 rounded-4xl border-l-4 border-green-400 hover:bg-white/20 transition-all group cursor-pointer" onclick="stepComplete(2)">
+                        <div class="w-12 h-12 bg-green-500 rounded-2xl flex items-center justify-center font-bold text-2xl text-white flex-shrink-0 group-hover:scale-110 transition-all">2</div>
+                        <div>
+                            <h3 class="text-2xl font-bold mb-3 group-hover:text-green-400 transition-all">Tulis Struktur HTML</h3>
+                            <p class="text-gray-300">Copy-paste kode ini ke Notepad:</p>
+                            <code class="block mt-3 p-4 bg-black rounded-2xl font-mono text-green-300 text-sm overflow-x-auto"><!DOCTYPE html>
+&lt;!Doctype html&gt;
+<br>
+&lt;html lang="id"&gt;<br>
+
+&lt;head&gt;<br>
+
+&lt;title&gt;Portofolio Saya&lt;/title&gt;<br>
+
+&lt;/head&gt;<br>
+
+&lt;body&gt;<br>
+
+&lt;h1&gt;Halo, saya [NAMA]&lt;/h1&gt;<br>
+
+&lt;p&gt;Selamat datang di portofolio HTML pertama saya!&lt;/p&gt;<br>
+
+&lt;p&gt;Saya sedang belajar membuat halaman web menggunakan Notepad++.&lt;/p&gt;<br>
+
+&lt;/body&gt;<br>
+
+&lt;/html&gt;</code>
+
+                            <div class="mt-3 w-full bg-gray-700 rounded-full h-3">
+                                <div class="bg-green-500 h-3 rounded-full w-0 step-progress-2 transition-all" style="width:0%"></div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="step-item flex items-start gap-6 p-6 bg-white/10 rounded-4xl border-l-4 border-green-400 hover:bg-white/20 transition-all group cursor-pointer" onclick="stepComplete(3)">
+                        <div class="w-12 h-12 bg-green-500 rounded-2xl flex items-center justify-center font-bold text-2xl text-white flex-shrink-0 group-hover:scale-110 transition-all">3</div>
+                        <div>
+                            <h3 class="text-2xl font-bold mb-3 group-hover:text-green-400 transition-all">Save as .html</h3>
+                            <p class="text-gray-300">Ctrl+S → Nama: <code class="bg-black px-3 py-1 rounded font-mono text-green-400">portfolio.html</code> → Save as type: <strong>All Files</strong> → Save</p>
+                            <div class="mt-3 w-full bg-gray-700 rounded-full h-3">
+                                <div class="bg-green-500 h-3 rounded-full w-0 step-progress-3 transition-all" style="width:0%"></div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="step-item flex items-start gap-6 p-6 bg-white/10 rounded-4xl border-l-4 border-green-400 hover:bg-white/20 transition-all group cursor-pointer" onclick="stepComplete(4)">
+                        <div class="w-12 h-12 bg-green-500 rounded-2xl flex items-center justify-center font-bold text-2xl text-white flex-shrink-0 group-hover:scale-110 transition-all">4</div>
+                        <div>
+                            <h3 class="text-2xl font-bold mb-3 group-hover:text-green-400 transition-all">Buka di Browser</h3>
+                            <p class="text-gray-300">Double-click file <code>portfolio.html</code> → otomatis buka Chrome/Edge!</p>
+                            <div class="mt-3 w-full bg-gray-700 rounded-full h-3">
+                                <div class="bg-green-500 h-3 rounded-full w-0 step-progress-4 transition-all" style="width:0%"></div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="step-item flex items-start gap-6 p-6 bg-white/10 rounded-4xl border-l-4 border-green-400 hover:bg-white/20 transition-all group cursor-pointer" onclick="stepComplete(5)">
+                        <div class="w-12 h-12 bg-green-500 rounded-2xl flex items-center justify-center font-bold text-2xl text-white flex-shrink-0 group-hover:scale-110 transition-all">5</div>
+                        <div>
+                            <h3 class="text-2xl font-bold mb-3 group-hover:text-green-400 transition-all">Tambah Semantic</h3>
+                            <p class="text-gray-300">Edit di Notepad, tambah elemen dari cheatset playground. Save → Refresh browser (F5)</p>
+                            <a href="./playground-1.html" target="_blank" class="text-green-400 hover:underline">Cheatset Semantic HTML</a>
+                            <br>
+                            <div class="mt-3 w-full bg-gray-700 rounded-full h-3">
+                                <div class="bg-green-500 h-3 rounded-full w-0 step-progress-5 transition-all" style="width:0%"></div>
+                            </div>
+                        </div>
+                    </li>
+                  
+</ol>
+            </section>
+
+            <!-- Checklist Verification -->
+            <section class="glass-card p-12 rounded-5xl">
+                <h2 class="text-4xl font-black mb-12 text-center text-white">Verifikasi Filemu ✅</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="check-item p-6 rounded-3xl bg-white/10 border-2 border-gray-600 cursor-pointer hover:border-green-400 transition-all" onclick="verifyFile()">
+                        <i class="fas fa-file-code text-3xl mb-4 block"></i>
+                        <h4 class="font-bold text-xl mb-2">portfolio.html</h4>
+                        <p class="text-gray-400 text-sm mb-4">File sudah ada?</p>
+                        <div class="w-full h-3 bg-gray-700 rounded-full">
+                            <div class="bg-green-500 h-3 rounded-full w-0 file-progress transition-all" style="width:0%"></div>
+                        </div>
+                    </div>
+                    <div class="check-item p-6 rounded-3xl bg-white/10 border-2 border-gray-600 cursor-pointer hover:border-emerald-400 transition-all" onclick="checkNotepad()">
+                        <i class="fas fa-edit text-3xl mb-4 block"></i>
+                        <h4 class="font-bold text-xl mb-2">Notepad Pro</h4>
+                        <p class="text-gray-400 text-sm mb-4">Ctrl+S → All Files → .html</p>
+                        <div class="w-full h-3 bg-gray-700 rounded-full">
+                            <div class="bg-emerald-500 h-3 rounded-full w-0 notepad-progress transition-all" style="width:0%"></div>
+                        </div>
+                    </div>
+                    <div class="check-item p-6 rounded-3xl bg-white/10 border-2 border-gray-600 cursor-pointer hover:border-blue-400 transition-all" onclick="checkBrowser()">
+                        <i class="fas fa-globe text-3xl mb-4 block"></i>
+                        <h4 class="font-bold text-xl mb-2">Browser Live</h4>
+                        <p class="text-gray-400 text-sm mb-4">Double-click → HTML hidup!</p>
+                        <div class="w-full h-3 bg-gray-700 rounded-full">
+                            <div class="bg-blue-500 h-3 rounded-full w-0 browser-progress transition-all" style="width:0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="mt-24 p-12 text-center border-t-4 border-green-400/50 rounded-t-3xl bg-white/10 backdrop-blur-xl">
+            <div class="text-3xl font-black mb-8 flex items-center justify-center gap-4 text-green-400">
+                <i class="fas fa-check-circle text-4xl"></i>
+                ✅ TUGAS LENGKAP OFFLINE!
+            </div>
+            <p class="text-lg text-gray-300 mt-4 font-semibold flex items-center justify-center gap-3">
+                <i class="fas fa-trophy text-green-400"></i> Portfolio.html kamu sudah siap digunakan!
+            </p>
+        </footer>
+    </div>
+
+    <script>
+let stepsComplete = 0;
+        const totalSteps = 6;
+
+        function stepComplete(step) {
+            if (!document.querySelector(`.step-progress-${step}`)) return;
+            
+            stepsComplete = Math.min(stepsComplete + 1, totalSteps);
+            document.querySelector(`.step-progress-${step}`).style.width = '100%';
+            
+            // Update main progress
+            document.getElementById('mainProgress').style.width = `${(stepsComplete/totalSteps)*100}%`;
+            document.getElementById('progressText').textContent = `${stepsComplete}/${totalSteps} Steps Complete`;
+            
+            // Confetti effect
+            if (stepsComplete === totalSteps) {
+                confettiEffect();
+                setTimeout(() => alert('SELAMAT! Tugas Notepad COMPLETE 100%! 🎉 Portfolio HTML kamu sudah siap!'), 500);
+            } else {
+                document.querySelector(`.step-item:nth-child(${step})`).style.borderLeftColor = '#10B981';
+            }
+        }
+
+        function verifyFile() {
+            // Simulate file check
+            document.querySelector('.file-progress').style.width = '100%';
+            alert('✅ File portfolio.html ditemukan! Bagus!');
+        }
+
+        function checkNotepad() {
+            document.querySelector('.notepad-progress').style.width = '100%';
+            alert('✅ Teknik Save as "All Files" ★ ★ ★ Perfect!');
+        }
+
+        function checkBrowser() {
+            document.querySelector('.browser-progress').style.width = '100%';
+            alert('✅ HTML live di browser! Kamu developer sejati!');
+        }
+
+
+
+        // Simple confetti
+        function confettiEffect() {
+            // Browser confetti polyfill simulation
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.style.position = 'fixed';
+                    confetti.style.left = Math.random() * window.innerWidth + 'px';
+                    confetti.style.top = '-10px';
+                    confetti.style.width = '10px';
+                    confetti.style.height = '10px';
+                    confetti.style.background = ['#10B981', '#F59E0B', '#6366F1', '#EF4444'][Math.floor(Math.random()*4)];
+                    confetti.style.borderRadius = '50%';
+                    confetti.style.pointerEvents = 'none';
+                    confetti.style.zIndex = '9999';
+                    confetti.style.animation = 'fall 3s linear forwards';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 20);
+            }
+        }
+
+        // CSS Animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fall {
+                to { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+            }
+            .glass-card { 
+                background: rgba(255,255,255,0.1); 
+                backdrop-filter: blur(20px); 
+                border: 1px solid rgba(255,255,255,0.2); 
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
+

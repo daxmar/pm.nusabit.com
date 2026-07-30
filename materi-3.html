@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <link rel="icon" type="image/png" href="https://nusabit.com/assets/logo-48.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materi Pertemuan 3 - Master HTML</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#E44D26', // Official HTML5 Orange
+                        'secondary': '#F16529',
+                        'dark-bg': '#0F172A',
+                        'card-bg': '#1E293B',
+                        'code-bg': '#282C34',
+                    },
+                    fontFamily: { 
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { scroll-behavior: smooth; }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        
+        .code-preview { 
+            background: #282c34; 
+            color: #abb2bf; 
+            padding: 1.5rem; 
+            border-radius: 0.75rem; 
+            font-family: 'Fira Code', monospace; 
+            overflow-x: auto; 
+            border: 1px solid #374151;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Syntax Highlighting */
+        .tag { color: #e06c75; }
+        .attr { color: #d19a66; }
+        .val { color: #98c379; }
+        .txt { color: #abb2bf; }
+        .comment { color: #5c6370; font-style: italic; }
+        .doctype { color: #c678dd; }
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .custom-scroll::-webkit-scrollbar { width: 8px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #0F172A; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #E44D26; }
+    </style>
+</head>
+<body class="bg-dark-bg text-gray-100 font-sans min-h-screen overflow-x-hidden custom-scroll selection:bg-primary selection:text-white">
+
+    <!-- Background Elements -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-primary/20 rounded-full blur-[100px] animate-pulse-slow"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-blue-600/20 rounded-full blur-[100px] animate-pulse-slow" style="animation-delay: 2s;"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-dark-bg/80 backdrop-blur-md border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <i class="fab fa-html5 text-3xl text-primary"></i>
+                    <span class="font-bold text-xl tracking-tight">Materi<span class="text-primary">HTML</span></span>
+                </div>
+                <div class="flex gap-4">
+                    <a href="index.php" class="text-gray-300 hover:text-white transition-colors text-sm font-medium flex items-center gap-2">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                    <a href="playground-1.html" class="bg-primary hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-bold transition-all shadow-lg shadow-primary/20 flex items-center gap-2">
+                        <i class="fas fa-code"></i> Playground
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-5xl mx-auto pt-24 pb-12 px-4 sm:px-6">
+        
+        <!-- Hero Section -->
+        <header class="text-center mb-20 reveal active">
+            <div class="inline-block mb-4 animate-float">
+                <i class="fab fa-html5 text-8xl text-transparent bg-clip-text bg-gradient-to-br from-orange-400 to-orange-600 drop-shadow-2xl"></i>
+            </div>
+            <h1 class="text-5xl md:text-6xl font-extrabold text-white mb-6 tracking-tight">
+                Menguasai <span class="text-primary">Struktur Web</span>
+            </h1>
+            <p class="text-gray-400 text-xl max-w-2xl mx-auto leading-relaxed">
+                Panduan lengkap memahami HTML dari nol hingga mahir. Bangun fondasi website yang kokoh dengan standar modern.
+            </p>
+            <div class="mt-10 flex justify-center gap-4">
+                <a href="#pengenalan" class="px-8 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-full font-semibold transition-all border border-gray-700">
+                    Mulai Belajar <i class="fas fa-arrow-down ml-2"></i>
+                </a>
+            </div>
+        </header>
+
+        <!-- Section 1: Pengenalan & Analogi -->
+        <section id="pengenalan" class="mb-24 reveal">
+            <div class="flex flex-col md:flex-row items-center gap-12 mb-16">
+                <div class="flex-1 space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 text-orange-400 text-xs font-bold uppercase tracking-wider border border-orange-500/20">
+                        <i class="fas fa-info-circle"></i> Konsep Dasar
+                    </div>
+                    <h2 class="text-3xl font-bold text-white">Apa itu HTML?</h2>
+                    <p class="text-gray-300 text-lg leading-relaxed">
+                        <strong class="text-primary">HTML (HyperText Markup Language)</strong> bukan bahasa pemrograman, melainkan bahasa markah (markup) yang memberitahu browser bagaimana menyusun konten.
+                    </p>
+                    
+                    <div class="bg-card-bg p-6 rounded-xl border border-gray-700 shadow-xl">
+                        <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                            <i class="fas fa-layer-group text-blue-400"></i> Analogi "The Big Three"
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-4 p-3 bg-dark-bg rounded-lg border border-gray-700">
+                                <div class="w-10 h-10 rounded bg-orange-500/20 flex items-center justify-center text-orange-500 font-bold"><i class="fab fa-html5"></i></div>
+                                <div>
+                                    <span class="block font-bold text-white">HTML = Tulang/Kerangka</span>
+                                    <span class="text-sm text-gray-400">Menentukan struktur (kepala, badan, kaki).</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4 p-3 bg-dark-bg rounded-lg border border-gray-700 opacity-75">
+                                <div class="w-10 h-10 rounded bg-blue-500/20 flex items-center justify-center text-blue-500 font-bold"><i class="fab fa-css3-alt"></i></div>
+                                <div>
+                                    <span class="block font-bold text-white">CSS = Kulit/Baju</span>
+                                    <span class="text-sm text-gray-400">Menentukan tampilan (warna, gaya, posisi).</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4 p-3 bg-dark-bg rounded-lg border border-gray-700 opacity-75">
+                                <div class="w-10 h-10 rounded bg-yellow-500/20 flex items-center justify-center text-yellow-500 font-bold"><i class="fab fa-js"></i></div>
+                                <div>
+                                    <span class="block font-bold text-white">JS = Otak/Otot</span>
+                                    <span class="text-sm text-gray-400">Menentukan fungsi & interaksi (gerak, logika).</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-1 relative">
+                    <div class="absolute inset-0 bg-gradient-to-r from-primary to-purple-600 rounded-2xl blur-2xl opacity-20 animate-pulse-slow"></div>
+                    <div class="relative bg-card-bg p-1 rounded-2xl border border-gray-700 shadow-2xl transform rotate-2 hover:rotate-0 transition-transform duration-500">
+                        <img src="https://images.unsplash.com/photo-1621839673705-6617adf9e890?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="HTML Code" class="rounded-xl w-full">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sejarah & Evolusi -->
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-card-bg p-8 rounded-2xl border border-gray-700 relative overflow-hidden group hover:border-primary/50 transition-all">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <i class="fas fa-history text-9xl text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4 flex items-center gap-3">
+                        <i class="fas fa-hourglass-start text-primary"></i> Asal Mula
+                    </h3>
+                    <p class="text-gray-300 leading-relaxed mb-4">
+                        Diciptakan oleh <strong>Sir Tim Berners-Lee</strong> pada tahun <strong>1991</strong> di CERN. Awalnya, HTML hanya memiliki 18 tag sederhana untuk berbagi dokumen ilmiah antar peneliti.
+                    </p>
+                    <p class="text-gray-300 leading-relaxed border-l-4 border-primary pl-4 italic">
+                        "Saya hanya mengambil ide hypertext dan menghubungkannya dengan TCP dan DNS dan — ta-da! — World Wide Web."
+                    </p>
+                </div>
+
+                <div class="bg-card-bg p-8 rounded-2xl border border-gray-700 relative overflow-hidden group hover:border-primary/50 transition-all">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <i class="fas fa-code-branch text-9xl text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4 flex items-center gap-3">
+                        <i class="fas fa-rocket text-primary"></i> Evolusi HTML5
+                    </h3>
+                    <ul class="space-y-4 relative z-10">
+                        <li class="flex gap-4 items-start border-b border-gray-700 pb-3">
+                            <span class="font-mono text-gray-500 text-sm mt-1">1999</span>
+                            <div>
+                                <strong class="text-gray-200 block">HTML 4.01</strong>
+                                <span class="text-sm text-gray-400">Standar lama yang bertahan lama. Masih kaku dan butuh plugin (Flash) untuk video.</span>
+                            </div>
+                        </li>
+                        <li class="flex gap-4 items-start">
+                            <span class="font-mono text-primary font-bold text-sm mt-1">2014</span>
+                            <div>
+                                <strong class="text-white block">HTML5 (Era Modern)</strong>
+                                <span class="text-sm text-gray-400">Revolusi web! Mendukung Video, Audio, Animasi, dan Aplikasi Web canggih secara native.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Struktur Dasar -->
+        <section class="mb-24 reveal">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-white mb-4">Anatomi Halaman Web</h2>
+                <p class="text-gray-400">Setiap file HTML wajib memiliki struktur ini agar terbaca oleh browser.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8 items-start">
+                <div class="code-preview text-sm md:text-base leading-relaxed">
+<span class="doctype">&lt;!DOCTYPE html&gt;</span>
+<br>&lt;<span class="tag">html</span> <span class="attr">lang</span>=<span class="val">"id"</span>&gt;
+
+  <span class="comment">&lt;!-- BAGIAN KEPALA (Info) --&gt;</span>
+  <br><br>&lt;<span class="tag">head</span>&gt;
+    <br>&lt;<span class="tag">meta</span> <span class="attr">charset</span>=<span class="val">"UTF-8"</span>&gt;
+    <br>&lt;<span class="tag">title</span>&gt;<span class="txt">Judul di Tab Browser</span>&lt;/<span class="tag">title</span>&gt;
+  <br>&lt;/<span class="tag">head</span>&gt;
+
+  <br><br><span class="comment">&lt;!-- BAGIAN TUBUH (Konten) --&gt;</span>
+  <br>&lt;<span class="tag">body</span>&gt;
+    <br>&lt;<span class="tag">h1</span>&gt;<span class="txt">Halo Dunia!</span>&lt;/<span class="tag">h1</span>&gt;
+    <br>&lt;<span class="tag">p</span>&gt;<span class="txt">Selamat datang di web saya.</span>&lt;/<span class="tag">p</span>&gt;
+  <br>&lt;/<span class="tag">body</span>&gt;
+
+<br><br>&lt;/<span class="tag">html</span>&gt;
+                </div>
+
+                <div class="space-y-4">
+                    <div class="group p-4 rounded-xl bg-card-bg border border-gray-700 hover:border-primary transition-all cursor-default">
+                        <h4 class="text-primary font-bold font-mono text-lg mb-1">&lt;!DOCTYPE html&gt;</h4>
+                        <p class="text-gray-400 text-sm">Deklarasi wajib di baris pertama. Memberitahu browser bahwa ini adalah dokumen HTML5 modern.</p>
+                    </div>
+                    <div class="group p-4 rounded-xl bg-card-bg border border-gray-700 hover:border-blue-500 transition-all cursor-default">
+                        <h4 class="text-blue-400 font-bold font-mono text-lg mb-1">&lt;html&gt; ... &lt;/html&gt;</h4>
+                        <p class="text-gray-400 text-sm">Elemen akar (root) yang membungkus seluruh kode HTML.</p>
+                    </div>
+                    <div class="group p-4 rounded-xl bg-card-bg border border-gray-700 hover:border-yellow-500 transition-all cursor-default">
+                        <h4 class="text-yellow-400 font-bold font-mono text-lg mb-1">&lt;head&gt; ... &lt;/head&gt;</h4>
+                        <p class="text-gray-400 text-sm">Berisi metadata, judul tab, dan link ke CSS. Konten di sini <strong>TIDAK</strong> tampil di halaman utama.</p>
+                    </div>
+                    <div class="group p-4 rounded-xl bg-card-bg border border-gray-700 hover:border-green-500 transition-all cursor-default">
+                        <h4 class="text-green-400 font-bold font-mono text-lg mb-1">&lt;body&gt; ... &lt;/body&gt;</h4>
+                        <p class="text-gray-400 text-sm">Wadah untuk semua konten yang <strong>TAMPIL</strong> di layar (teks, gambar, video, tombol).</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Tag Esensial -->
+        <section class="mb-24 reveal">
+            <h2 class="text-3xl font-bold text-white mb-8 border-l-4 border-primary pl-4">Tag HTML Paling Sering Dipakai</h2>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Text Tags -->
+                <div class="glass-card p-6 rounded-xl hover:bg-card-bg transition-colors">
+                    <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center text-purple-400 text-2xl mb-4"><i class="fas fa-heading"></i></div>
+                    <h3 class="text-xl font-bold text-white mb-2">Teks & Judul</h3>
+                    <ul class="space-y-3 text-gray-400 text-sm">
+                        <li class="border-b border-gray-700 pb-2">
+                            <code class="text-primary font-bold">&lt;h1&gt;</code> s/d <code class="text-primary font-bold">&lt;h6&gt;</code>
+                            <br>Untuk judul (Heading). h1 paling besar.
+                        </li>
+                        <li class="border-b border-gray-700 pb-2">
+                            <code class="text-primary font-bold">&lt;p&gt;</code>
+                            <br>Untuk paragraf teks biasa.
+                        </li>
+                        <li>
+                            <code class="text-primary font-bold">&lt;br&gt;</code> & <code class="text-primary font-bold">&lt;hr&gt;</code>
+                            <br>Ganti baris & Garis horizontal.
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Media & Links -->
+                <div class="glass-card p-6 rounded-xl hover:bg-card-bg transition-colors">
+                    <div class="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center text-green-400 text-2xl mb-4"><i class="fas fa-photo-video"></i></div>
+                    <h3 class="text-xl font-bold text-white mb-2">Media & Link</h3>
+                    <ul class="space-y-3 text-gray-400 text-sm">
+                        <li class="border-b border-gray-700 pb-2">
+                            <code class="text-primary font-bold">&lt;a href="..."&gt;</code>
+                            <br>Anchor/Link untuk pindah halaman.
+                        </li>
+                        <li class="border-b border-gray-700 pb-2">
+                            <code class="text-primary font-bold">&lt;img src="..."&gt;</code>
+                            <br>Menampilkan gambar. Wajib ada atribut src.
+                        </li>
+                        <li>
+                            <code class="text-primary font-bold">&lt;ul&gt;</code> & <code class="text-primary font-bold">&lt;li&gt;</code>
+                            <br>Membuat daftar poin (List).
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Container -->
+                <div class="glass-card p-6 rounded-xl hover:bg-card-bg transition-colors">
+                    <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center text-blue-400 text-2xl mb-4"><i class="fas fa-box"></i></div>
+                    <h3 class="text-xl font-bold text-white mb-2">Wadah (Container)</h3>
+                    <ul class="space-y-3 text-gray-400 text-sm">
+                        <li class="border-b border-gray-700 pb-2">
+                            <code class="text-primary font-bold">&lt;div&gt;</code>
+                            <br>Pembungkus blok umum (paling sering dipakai).
+                        </li>
+                        <li class="border-b border-gray-700 pb-2">
+                            <code class="text-primary font-bold">&lt;span&gt;</code>
+                            <br>Pembungkus teks dalam baris (inline).
+                        </li>
+                        <li>
+                            <code class="text-primary font-bold">&lt;form&gt;</code>
+                            <br>Wadah untuk input data pengguna.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Atribut -->
+        <section class="mb-24 reveal">
+            <div class="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-8 border border-gray-700 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
+                
+                <h2 class="text-3xl font-bold text-white mb-6">Kekuatan Atribut</h2>
+                <p class="text-gray-300 mb-8 max-w-3xl">
+                    Tag HTML bisa memiliki informasi tambahan yang disebut <strong>Atribut</strong>. Atribut selalu ditulis di dalam tag pembuka.
+                    Formatnya: <code class="bg-black/30 px-2 py-1 rounded text-primary">nama="nilai"</code>.
+                </p>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="text-gray-400 border-b border-gray-700 text-sm uppercase">
+                                <th class="py-3 px-4">Atribut</th>
+                                <th class="py-3 px-4">Digunakan di Tag</th>
+                                <th class="py-3 px-4">Fungsi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-300">
+                            <tr class="border-b border-gray-800 hover:bg-white/5">
+                                <td class="py-3 px-4 font-mono text-primary">href</td>
+                                <td class="py-3 px-4"><code>&lt;a&gt;</code></td>
+                                <td class="py-3 px-4">Menentukan tujuan link (URL website atau file).</td>
+                            </tr>
+                            <tr class="border-b border-gray-800 hover:bg-white/5">
+                                <td class="py-3 px-4 font-mono text-primary">src</td>
+                                <td class="py-3 px-4"><code>&lt;img&gt;, &lt;video&gt;</code></td>
+                                <td class="py-3 px-4">Source. Menentukan lokasi file gambar/video yang akan ditampilkan.</td>
+                            </tr>
+                            <tr class="border-b border-gray-800 hover:bg-white/5">
+                                <td class="py-3 px-4 font-mono text-primary">alt</td>
+                                <td class="py-3 px-4"><code>&lt;img&gt;</code></td>
+                                <td class="py-3 px-4">Teks alternatif jika gambar gagal dimuat (penting untuk SEO).</td>
+                            </tr>
+                            <tr class="border-b border-gray-800 hover:bg-white/5">
+                                <td class="py-3 px-4 font-mono text-primary">class</td>
+                                <td class="py-3 px-4">Semua Tag</td>
+                                <td class="py-3 px-4">Memberi nama kelompok untuk dihias dengan CSS.</td>
+                            </tr>
+                            <tr class="hover:bg-white/5">
+                                <td class="py-3 px-4 font-mono text-primary">id</td>
+                                <td class="py-3 px-4">Semua Tag</td>
+                                <td class="py-3 px-4">Memberi nama unik (identitas) pada satu elemen spesifik.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Semantic HTML -->
+        <section class="mb-24 reveal">
+            <div class="flex flex-col lg:flex-row gap-10 items-center">
+                <div class="lg:w-1/2">
+                    <h2 class="text-3xl font-bold text-white mb-4">Semantic HTML</h2>
+                    <p class="text-gray-400 mb-6">
+                        Menulis HTML bukan cuma soal "tampil benar", tapi juga "bermakna benar". Gunakan tag yang sesuai dengan fungsinya agar kode rapi dan mudah dibaca mesin pencari (Google).
+                    </p>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                            <div>
+                                <strong class="text-white block">Gunakan &lt;header&gt;</strong>
+                                <span class="text-sm text-gray-500">Untuk bagian atas web (logo, menu). Jangan pakai div biasa.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                            <div>
+                                <strong class="text-white block">Gunakan &lt;main&gt;</strong>
+                                <span class="text-sm text-gray-500">Untuk pembungkus konten utama halaman.</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                            <div>
+                                <strong class="text-white block">Gunakan &lt;footer&gt;</strong>
+                                <span class="text-sm text-gray-500">Untuk bagian kaki web (copyright, kontak).</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="lg:w-1/2 w-full">
+                    <!-- Visual Representation of Semantic Layout -->
+                    <div class="bg-gray-800 p-4 rounded-lg border-2 border-dashed border-gray-600 flex flex-col gap-2 h-80">
+                        <div class="bg-red-500/20 border border-red-500/50 p-2 rounded text-center text-red-300 font-mono text-xs h-12 flex items-center justify-center">&lt;header&gt;</div>
+                        <div class="flex gap-2 flex-1">
+                            <div class="bg-yellow-500/20 border border-yellow-500/50 p-2 rounded text-center text-yellow-300 font-mono text-xs w-1/4 flex items-center justify-center">&lt;nav&gt;</div>
+                            <div class="bg-green-500/20 border border-green-500/50 p-2 rounded text-center text-green-300 font-mono text-xs flex-1 flex flex-col gap-2 p-4">
+                                &lt;main&gt;
+                                <div class="bg-white/10 h-2 rounded w-3/4 mx-auto"></div>
+                                <div class="bg-white/10 h-2 rounded w-full mx-auto"></div>
+                                <div class="bg-white/10 h-2 rounded w-5/6 mx-auto"></div>
+                            </div>
+                        </div>
+                        <div class="bg-blue-500/20 border border-blue-500/50 p-2 rounded text-center text-blue-300 font-mono text-xs h-12 flex items-center justify-center">&lt;footer&gt;</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="reveal">
+            <div class="bg-gradient-to-r from-primary to-orange-600 rounded-3xl p-10 text-center shadow-2xl relative overflow-hidden group">
+                <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+                <div class="absolute -top-24 -left-24 w-64 h-64 bg-white/20 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
+                
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-6 relative z-10">Saatnya Praktek!</h2>
+                <p class="text-white/90 text-lg mb-8 max-w-2xl mx-auto relative z-10">
+                    Teori sudah dikuasai. Sekarang giliranmu menulis kode HTML pertamamu. 
+                    Buatlah halaman biodata diri sederhana di Playground.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row justify-center gap-4 relative z-10">
+                    <a href="playground-1.html" class="px-8 py-4 bg-white text-primary font-bold rounded-xl shadow-lg hover:bg-gray-100 hover:scale-105 transition-all flex items-center justify-center gap-2">
+                        <i class="fas fa-laptop-code"></i> Buka Playground
+                    </a>
+                    <a href="tugas-3.html" class="px-8 py-4 bg-black/30 text-white font-bold rounded-xl border border-white/30 hover:bg-black/50 transition-all flex items-center justify-center gap-2">
+                        <i class="fas fa-tasks"></i> Kerjakan Tugas
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark-bg border-t border-gray-800 py-12 mt-12">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="text-gray-500 text-sm mb-4">&copy; 2026 Nusabit Code Kitchen. Dibuat dengan <i class="fas fa-heart text-red-500 mx-1"></i> untuk pendidikan.</p>
+            <div class="flex justify-center gap-4 text-gray-600">
+                <i class="fab fa-html5 hover:text-primary transition-colors cursor-pointer"></i>
+                <i class="fab fa-css3-alt hover:text-blue-500 transition-colors cursor-pointer"></i>
+                <i class="fab fa-js hover:text-yellow-500 transition-colors cursor-pointer"></i>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Animation Script -->
+    <script>
+        // Intersection Observer for Reveal Animation
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    // Optional: Stop observing once revealed
+                    // observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

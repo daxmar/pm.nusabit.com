@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <link rel="icon" type="image/png" href="https://nusabit.com/assets/logo-48.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materi Pertemuan 4 - Menghias Web</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#8B5CF6', // Violet/Purple for CSS/Styling theme
+                        'secondary': '#EC4899', // Pink
+                        'dark-bg': '#0F172A',
+                        'card-bg': '#1E293B',
+                        'code-bg': '#282C34',
+                    },
+                    fontFamily: { 
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { scroll-behavior: smooth; }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        
+        .code-preview { 
+            background: #282c34; 
+            color: #abb2bf; 
+            padding: 1.5rem; 
+            border-radius: 0.75rem; 
+            font-family: 'Fira Code', monospace; 
+            overflow-x: auto; 
+            border: 1px solid #374151;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Syntax Highlighting */
+        .tag { color: #e06c75; }
+        .attr { color: #d19a66; }
+        .val { color: #98c379; }
+        .txt { color: #abb2bf; }
+        .comment { color: #5c6370; font-style: italic; }
+        
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .custom-scroll::-webkit-scrollbar { width: 8px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #0F172A; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #8B5CF6; }
+    </style>
+</head>
+<body class="bg-dark-bg text-gray-100 font-sans min-h-screen overflow-x-hidden custom-scroll selection:bg-primary selection:text-white">
+
+    <!-- Background Elements -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div class="absolute top-[-10%] right-[-10%] w-96 h-96 bg-primary/20 rounded-full blur-[100px] animate-pulse-slow"></div>
+        <div class="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-secondary/20 rounded-full blur-[100px] animate-pulse-slow" style="animation-delay: 2s;"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-dark-bg/80 backdrop-blur-md border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-magic text-3xl text-primary"></i>
+                    <span class="font-bold text-xl tracking-tight">Materi<span class="text-primary">HTML+</span></span>
+                </div>
+                <div class="flex gap-4">
+                    <a href="index.php" class="text-gray-300 hover:text-white transition-colors text-sm font-medium flex items-center gap-2">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                    <a href="playground-1.html" class="bg-primary hover:bg-violet-600 text-white px-4 py-2 rounded-lg text-sm font-bold transition-all shadow-lg shadow-primary/20 flex items-center gap-2">
+                        <i class="fas fa-code"></i> Playground
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-5xl mx-auto pt-24 pb-12 px-4 sm:px-6">
+        
+        <!-- Hero Section -->
+        <header class="text-center mb-20 reveal active">
+            <div class="inline-block mb-4 animate-float">
+                <i class="fas fa-palette text-8xl text-transparent bg-clip-text bg-gradient-to-br from-violet-400 to-pink-600 drop-shadow-2xl"></i>
+            </div>
+            <h1 class="text-5xl md:text-6xl font-extrabold text-white mb-6 tracking-tight">
+                Menghias & <span class="text-primary">Menghubungkan</span>
+            </h1>
+            <p class="text-gray-400 text-xl max-w-2xl mx-auto leading-relaxed">
+                Web hitam putih itu membosankan! Saatnya belajar memberi warna, mengatur gaya, dan membuat portal ke halaman lain.
+            </p>
+            <div class="mt-10 flex justify-center gap-4">
+                <a href="#styling" class="px-8 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-full font-semibold transition-all border border-gray-700">
+                    Mulai Menghias <i class="fas fa-paint-brush ml-2"></i>
+                </a>
+            </div>
+        </header>
+
+        <!-- Section 1: Atribut Style (Inline CSS) -->
+        <section id="styling" class="mb-24 reveal">
+            <div class="flex flex-col md:flex-row items-center gap-12 mb-12">
+                <div class="flex-1 space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 text-violet-400 text-xs font-bold uppercase tracking-wider border border-violet-500/20">
+                        <i class="fas fa-star"></i> Level Up
+                    </div>
+                    <h2 class="text-3xl font-bold text-white">Atribut <span class="text-secondary font-mono">style="..."</span></h2>
+                    <p class="text-gray-300 text-lg leading-relaxed">
+                        Ingat analogi "Baju"? Kita bisa memakaikan baju langsung ke elemen HTML menggunakan atribut <code>style</code>. Ini adalah cara tercepat untuk mengubah tampilan.
+                    </p>
+                    <p class="text-gray-400 text-sm italic border-l-2 border-gray-600 pl-3">
+                        Rumusnya: <strong>Properti: Nilai;</strong> (Jangan lupa titik dua dan titik koma!)
+                    </p>
+                </div>
+                <div class="flex-1 w-full">
+                    <div class="code-preview text-sm shadow-2xl">
+<span class="comment">&lt;!-- Mengubah Warna Teks --&gt;</span>
+<br>&lt;<span class="tag">h1</span> <span class="attr">style</span>=<span class="val">"color: red;"</span>&gt;<span class="txt">Judul Merah</span>&lt;/<span class="tag">h1</span>&gt;
+
+<br><br><span class="comment">&lt;!-- Mengubah Background --&gt;</span>
+<br>&lt;<span class="tag">div</span> <span class="attr">style</span>=<span class="val">"background-color: blue; color: white;"</span>&gt;
+<br>  <span class="txt">Kotak Biru Teks Putih</span>
+<br>&lt;/<span class="tag">div</span>&gt;
+
+<br><br><span class="comment">&lt;!-- Mengubah Ukuran Font --&gt;</span>
+<br>&lt;<span class="tag">p</span> <span class="attr">style</span>=<span class="val">"font-size: 20px;"</span>&gt;<span class="txt">Tulisan Besar</span>&lt;/<span class="tag">p</span>&gt;
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Style Cards -->
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="glass-card p-6 rounded-xl text-center group hover:bg-gray-800 transition-all">
+                    <div class="w-16 h-16 mx-auto bg-red-500 rounded-full mb-4 shadow-lg group-hover:scale-110 transition-transform"></div>
+                    <h3 class="font-bold text-white mb-2">Warna (Color)</h3>
+                    <code class="bg-black/30 px-2 py-1 rounded text-secondary text-sm">color: red;</code>
+                    <p class="text-gray-400 text-xs mt-2">Bisa pakai nama (red, blue) atau kode hex (#ff0000).</p>
+                </div>
+                <div class="glass-card p-6 rounded-xl text-center group hover:bg-gray-800 transition-all">
+                    <div class="w-16 h-16 mx-auto bg-gray-700 rounded mb-4 shadow-lg border-2 border-white group-hover:scale-110 transition-transform"></div>
+                    <h3 class="font-bold text-white mb-2">Latar (Background)</h3>
+                    <code class="bg-black/30 px-2 py-1 rounded text-secondary text-sm">background-color: black;</code>
+                    <p class="text-gray-400 text-xs mt-2">Memberi warna latar belakang elemen.</p>
+                </div>
+                <div class="glass-card p-6 rounded-xl text-center group hover:bg-gray-800 transition-all">
+                    <div class="h-16 mx-auto flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <span class="text-4xl font-bold text-white">Aa</span>
+                    </div>
+                    <h3 class="font-bold text-white mb-2">Ukuran (Font Size)</h3>
+                    <code class="bg-black/30 px-2 py-1 rounded text-secondary text-sm">font-size: 24px;</code>
+                    <p class="text-gray-400 text-xs mt-2">Mengatur besar kecilnya huruf dalam pixel (px).</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 1.5: Jurus Styling Tambahan -->
+        <section class="mb-24 reveal">
+            <h2 class="text-3xl font-bold text-white mb-8 text-center">Jurus Styling Tambahan</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="space-y-6">
+                    <div class="bg-card-bg p-6 rounded-xl border border-gray-700">
+                        <h3 class="text-xl font-bold text-white mb-2"><i class="fas fa-align-center text-primary"></i> Posisi Teks</h3>
+                        <p class="text-gray-400 text-sm mb-3">Biar judul ada di tengah, gunakan <code>text-align</code>.</p>
+                        <div class="code-preview text-xs">
+&lt;<span class="tag">h1</span> <span class="attr">style</span>=<span class="val">"text-align: center;"</span>&gt;
+<br>  <span class="txt">Judul di Tengah</span>
+<br>&lt;/<span class="tag">h1</span>&gt;
+                        </div>
+                    </div>
+                    
+                    <div class="bg-card-bg p-6 rounded-xl border border-gray-700">
+                        <h3 class="text-xl font-bold text-white mb-2"><i class="far fa-square text-primary"></i> Sudut Tumpul</h3>
+                        <p class="text-gray-400 text-sm mb-3">Biar kotak tidak tajam, gunakan <code>border-radius</code>.</p>
+                        <div class="code-preview text-xs">
+&lt;<span class="tag">img</span> <span class="attr">src</span>=<span class="val">"foto.jpg"</span> <span class="attr">style</span>=<span class="val">"border-radius: 50%;"</span>&gt;
+                        </div>
+                        <p class="text-gray-500 text-xs mt-2 italic">Tips: Nilai <strong>50%</strong> membuat gambar jadi bulat sempurna!</p>
+                    </div>
+
+                    <div class="bg-card-bg p-6 rounded-xl border border-gray-700">
+                        <h3 class="text-xl font-bold text-white mb-2"><i class="fas fa-font text-primary"></i> Ganti Gaya Huruf</h3>
+                        <p class="text-gray-400 text-sm mb-3">Gunakan <code>font-family</code> untuk mengubah jenis tulisan.</p>
+                        <div class="code-preview text-xs">
+<span class="attr">style</span>=<span class="val">"font-family: monospace;"</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-br from-violet-900/50 to-fuchsia-900/50 p-8 rounded-2xl border border-white/10 flex flex-col items-center justify-center text-center">
+                    <div class="w-40 h-40 bg-white rounded-full mb-6 overflow-hidden border-4 border-primary shadow-xl transition-transform hover:scale-105 duration-500">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Avatar" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-3xl font-bold text-white mb-2" style="text-shadow: 0 2px 10px rgba(0,0,0,0.5);">Profil Keren</h3>
+                    <p class="text-gray-300 font-mono bg-black/30 px-4 py-2 rounded-lg">
+                        &lt;h3 style="text-align: center;"&gt;
+                    </p>
+                    <p class="text-gray-400 text-sm mt-4 max-w-xs">
+                        Contoh hasil penggunaan <code>text-align: center</code> dan <code>border-radius: 50%</code> pada gambar profil.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 1.8: Teori Warna (Hex Codes) -->
+        <section class="mb-24 reveal">
+            <div class="flex flex-col md:flex-row gap-10 items-center">
+                <div class="flex-1">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-500/10 text-pink-400 text-xs font-bold uppercase tracking-wider border border-pink-500/20 mb-4">
+                        <i class="fas fa-palette"></i> Teori Warna
+                    </div>
+                    <h2 class="text-3xl font-bold text-white mb-4">Kode Rahasia Warna</h2>
+                    <p class="text-gray-300 mb-4">
+                        Komputer tidak hanya tahu warna "Red" atau "Blue". Komputer bisa menampilkan 16 juta warna menggunakan <strong>Kode Hex</strong>.
+                    </p>
+                    <p class="text-gray-400 text-sm mb-6">
+                        Kode Hex dimulai dengan tanda pagar <code>#</code> diikuti 6 karakter (angka 0-9 dan huruf A-F).
+                    </p>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="flex items-center gap-3 bg-card-bg p-3 rounded-lg border border-gray-700">
+                            <div class="w-8 h-8 rounded bg-[#FF0000]"></div>
+                            <div><span class="block text-white font-mono font-bold">#FF0000</span><span class="text-xs text-gray-500">Merah</span></div>
+                        </div>
+                        <div class="flex items-center gap-3 bg-card-bg p-3 rounded-lg border border-gray-700">
+                            <div class="w-8 h-8 rounded bg-[#00FF00]"></div>
+                            <div><span class="block text-white font-mono font-bold">#00FF00</span><span class="text-xs text-gray-500">Hijau</span></div>
+                        </div>
+                        <div class="flex items-center gap-3 bg-card-bg p-3 rounded-lg border border-gray-700">
+                            <div class="w-8 h-8 rounded bg-[#0000FF]"></div>
+                            <div><span class="block text-white font-mono font-bold">#0000FF</span><span class="text-xs text-gray-500">Biru</span></div>
+                        </div>
+                        <div class="flex items-center gap-3 bg-card-bg p-3 rounded-lg border border-gray-700">
+                            <div class="w-8 h-8 rounded bg-[#FFFF00]"></div>
+                            <div><span class="block text-white font-mono font-bold">#FFFF00</span><span class="text-xs text-gray-500">Kuning</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-1 relative">
+                    <div class="absolute inset-0 bg-gradient-to-r from-pink-500 to-violet-600 blur-3xl opacity-20"></div>
+                    <div class="relative bg-gray-900 p-6 rounded-xl border border-gray-700 shadow-2xl text-center">
+                        <h4 class="text-white font-bold mb-4">Campuran Warna (RGB)</h4>
+                        <p class="text-sm text-gray-400 mb-4">Semua warna di layar HP/Laptopmu terbuat dari campuran cahaya <span class="text-red-500 font-bold">Red</span>, <span class="text-green-500 font-bold">Green</span>, dan <span class="text-blue-500 font-bold">Blue</span>!</p>
+                        <div class="flex justify-center gap-4"><div class="w-16 h-16 rounded-full bg-red-500 mix-blend-screen -mr-8"></div><div class="w-16 h-16 rounded-full bg-green-500 mix-blend-screen -mr-8"></div><div class="w-16 h-16 rounded-full bg-blue-500 mix-blend-screen"></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Hyperlink (Portal) -->
+        <section class="mb-24 reveal">
+            <div class="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-8 border border-gray-700 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-secondary/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
+                
+                <div class="flex flex-col md:flex-row gap-8 items-center">
+                    <div class="flex-1">
+                        <h2 class="text-3xl font-bold text-white mb-4"><i class="fas fa-link text-primary mr-2"></i> Portal Antar Halaman</h2>
+                        <p class="text-gray-300 mb-6">
+                            Web tanpa link itu seperti rumah tanpa pintu. Gunakan tag <code>&lt;a&gt;</code> (Anchor) untuk membuat "portal" ke halaman lain atau website lain.
+                        </p>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-black/20 p-4 rounded-lg border-l-4 border-green-500">
+                                <h4 class="text-green-400 font-bold text-sm mb-1">Link ke Website Lain (External)</h4>
+                                <code class="text-gray-300 text-xs block mb-2">&lt;a href="https://google.com" target="_blank"&gt;Ke Google&lt;/a&gt;</code>
+                                <p class="text-gray-500 text-xs">Tips: <code>target="_blank"</code> membuat link terbuka di tab baru.</p>
+                            </div>
+                            <div class="bg-black/20 p-4 rounded-lg border-l-4 border-blue-500">
+                                <h4 class="text-blue-400 font-bold text-sm mb-1">Link ke File Sendiri (Internal)</h4>
+                                <code class="text-gray-300 text-xs block mb-2">&lt;a href="biodata.html"&gt;Lihat Biodata&lt;/a&gt;</code>
+                                <p class="text-gray-500 text-xs">Pastikan nama file sama persis (huruf besar/kecil berpengaruh!).</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-1 flex justify-center">
+                        <div class="relative group cursor-pointer">
+                            <div class="absolute inset-0 bg-primary blur-xl opacity-50 group-hover:opacity-80 transition-opacity duration-500 animate-pulse"></div>
+                            <button class="relative bg-dark-bg border border-primary text-white px-8 py-4 rounded-xl font-bold flex items-center gap-3 group-hover:scale-105 transition-transform">
+                                <i class="fas fa-door-open text-2xl text-secondary"></i>
+                                KLIK SAYA
+                            </button>
+                            <div class="absolute -bottom-8 left-0 w-full text-center text-xs text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                                (Ini contoh tombol link!)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Iframe (Jendela Dunia) -->
+        <section class="mb-24 reveal">
+            <h2 class="text-3xl font-bold text-white mb-8 text-center">Jendela Dunia (Iframe)</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="order-2 md:order-1">
+                    <div class="bg-card-bg p-2 rounded-xl border border-gray-700 shadow-2xl">
+                        <!-- Placeholder for YouTube Embed -->
+                        <div class="aspect-video bg-black rounded-lg flex items-center justify-center relative overflow-hidden group">
+                            <iframe class="w-full h-full" src="https://www.youtube.com/embed/twbBo1ybJwE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-1 md:order-2">
+                    <p class="text-gray-300 mb-4">
+                        Bagaimana cara menampilkan video YouTube atau Peta Google di web kita? Jawabannya adalah <strong>Iframe</strong>.
+                    </p>
+                    <p class="text-gray-300 mb-6">
+                        Iframe seperti melubangi web kita untuk mengintip web orang lain.
+                    </p>
+                    
+                    <div class="code-preview text-xs md:text-sm">
+<span class="comment">&lt;!-- Embed Video Youtube --&gt;</span>
+<br>&lt;<span class="tag">iframe</span> 
+<br>  <span class="attr">width</span>=<span class="val">"560"</span> 
+<br>  <span class="attr">height</span>=<span class="val">"315"</span> 
+<br>  <span class="attr">src</span>=<span class="val">"https://www.youtube.com/embed/twbBo1ybJwE"</span>&gt;
+<br>&lt;/<span class="tag">iframe</span>&gt;
+                    </div>
+                    
+                    <div class="mt-4 bg-yellow-500/10 border border-yellow-500/30 p-3 rounded-lg flex gap-3 items-start">
+                        <i class="fas fa-lightbulb text-yellow-500 mt-1"></i>
+                        <p class="text-xs text-yellow-200">
+                            <strong>Tips:</strong> Di YouTube, klik tombol "Share" -> "Embed" untuk mendapatkan kode iframe otomatis!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Challenge Section -->
+        <section class="reveal">
+            <div class="bg-gradient-to-r from-violet-900 to-primary rounded-3xl p-10 text-center shadow-2xl relative overflow-hidden group border border-white/10">
+                <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20"></div>
+                
+                <div class="relative z-10">
+                    <div class="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-6 backdrop-blur-sm border border-white/20">
+                        <i class="fas fa-trophy text-3xl text-yellow-400"></i>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Tantangan: Kartu Nama Digital</h2>
+                    <p class="text-gray-200 text-lg mb-8 max-w-2xl mx-auto">
+                        Gabungkan semua ilmu (HTML Dasar + Style + Link) untuk membuat halaman "Kartu Nama" yang berisi:
+                    </p>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto mb-8 text-left">
+                        <div class="bg-black/20 p-4 rounded-lg backdrop-blur-sm">
+                            <i class="fas fa-image text-secondary mb-2"></i>
+                            <p class="text-sm font-bold text-white">Foto Profil</p>
+                            <p class="text-xs text-gray-300">Pakai tag img</p>
+                        </div>
+                        <div class="bg-black/20 p-4 rounded-lg backdrop-blur-sm">
+                            <i class="fas fa-font text-secondary mb-2"></i>
+                            <p class="text-sm font-bold text-white">Nama Berwarna</p>
+                            <p class="text-xs text-gray-300">Pakai style color</p>
+                        </div>
+                        <div class="bg-black/20 p-4 rounded-lg backdrop-blur-sm">
+                            <i class="fas fa-link text-secondary mb-2"></i>
+                            <p class="text-sm font-bold text-white">Link Sosmed</p>
+                            <p class="text-xs text-gray-300">Pakai tag a (href)</p>
+                        </div>
+                        <div class="bg-black/20 p-4 rounded-lg backdrop-blur-sm">
+                            <i class="fas fa-video text-secondary mb-2"></i>
+                            <p class="text-sm font-bold text-white">Video Favorit</p>
+                            <p class="text-xs text-gray-300">Pakai iframe</p>
+                        </div>
+                    </div>
+
+                    <a href="playground-1.html" class="inline-flex items-center gap-2 px-8 py-4 bg-white text-primary font-bold rounded-xl shadow-lg hover:bg-gray-100 hover:scale-105 transition-all">
+                        <i class="fas fa-rocket"></i> Buka Playground & Coba!
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark-bg border-t border-gray-800 py-12 mt-12">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="text-gray-500 text-sm mb-4">&copy; 2026 Nusabit Code Kitchen. Materi Level 2.</p>
+            <div class="flex justify-center gap-4 text-gray-600">
+                <a href="materi-3.html" class="hover:text-white transition-colors text-xs">Kembali ke Materi 3</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Animation Script -->
+    <script>
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, observerOptions);
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>

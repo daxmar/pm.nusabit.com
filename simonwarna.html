@@ -1,0 +1,322 @@
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simon Warna - Tes Memori</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome (for icon) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-dark': '#1a202c',
+                        'secondary-light': '#cbd5e0',
+                        'accent-yellow': '#facc15',
+                    },
+                    keyframes: {
+                        flash: {
+                            '0%, 100%': { opacity: '1', transform: 'scale(1.05)' },
+                            '50%': { opacity: '0.5', transform: 'scale(1.0)' },
+                        }
+                    },
+                    animation: {
+                        flash: 'flash 0.3s ease-in-out',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            transition: background-color 0.5s;
+        }
+        /* Custom styles for the color segments arrangement (Pentagon style) */
+        .color-segment {
+            cursor: pointer;
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+            filter: brightness(80%);
+            border: 4px solid #374151; /* Dark border to define separation */
+            border-radius: 1rem;
+        }
+
+        .color-segment:hover {
+            filter: brightness(100%);
+        }
+
+        .color-segment.active {
+            filter: brightness(120%);
+            transform: scale(1.08);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
+        }
+
+        /* Positioning the 5 elements in a circular/pentagonal fashion */
+        #game-board {
+            position: relative;
+            width: 350px;
+            height: 350px;
+            margin: 0 auto;
+            border-radius: 50%;
+            background-color: #374151; 
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .segment-container {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            transform-origin: 175px 175px; /* Center of the game board */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Calculated rotation for 5 segments (360/5 = 72 degrees) */
+        #segment-0 { transform: rotate(0deg) translate(110px) rotate(0deg); }
+        #segment-1 { transform: rotate(72deg) translate(110px) rotate(-72deg); }
+        #segment-2 { transform: rotate(144deg) translate(110px) rotate(-144deg); }
+        #segment-3 { transform: rotate(216deg) translate(110px) rotate(-216deg); }
+        #segment-4 { transform: rotate(288deg) translate(110px) rotate(-288deg); }
+
+    </style>
+</head>
+
+<body class="bg-primary-dark text-secondary-light min-h-screen flex items-center justify-center p-4">
+
+    <div class="w-full max-w-lg bg-gray-800 shadow-2xl rounded-xl p-6 md:p-10">
+        
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-extrabold text-accent-yellow mb-2">Simon Warna</h1>
+            <p class="text-gray-400">Uji ingatan urutan warna Anda. Perhatikan dan ulangi!</p>
+        </header>
+
+<button onclick="window.location.href='index.php'" class="inline-flex justify-center items-center px-4 py-1.5 bg-green-600 text-white text-sm font-bold rounded-lg hover:bg-green-700 transition-all shadow-md hover:shadow-green-500/30">
+    <i class="fa-solid fa-right-to-bracket mr-1.5 text-xs"></i>kembali ke Beranda
+</button><div class="mt-5"></div>
+
+        <!-- Game Status and Controls -->
+        <div class="flex justify-between items-center mb-8 text-center bg-gray-700 p-4 rounded-lg shadow-inner">
+            <div class="w-1/3">
+                <span class="text-sm uppercase text-gray-400">Level</span>
+                <p id="level-display" class="text-2xl font-bold text-white">1</p>
+            </div>
+            <div class="w-1/3">
+                <button id="start-button" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 shadow-lg disabled:opacity-50">
+                    Mulai <i class="fas fa-play ml-1"></i>
+                </button>
+            </div>
+            <div class="w-1/3">
+                <span class="text-sm uppercase text-gray-400">Skor Max</span>
+                <p id="score-display" class="text-2xl font-bold text-white">0</p>
+            </div>
+        </div>
+
+        <!-- Game Board Area -->
+        <div id="game-board-container" class="flex justify-center items-center mb-8">
+            <div id="game-board">
+                
+                <div id="segment-0" class="segment-container">
+                    <div id="color-0" class="color-segment w-full h-full bg-red-600 active:ring-4 active:ring-red-400" onclick="handleColorClick(0)"></div>
+                </div>
+                <div id="segment-1" class="segment-container">
+                    <div id="color-1" class="color-segment w-full h-full bg-blue-600 active:ring-4 active:ring-blue-400" onclick="handleColorClick(1)"></div>
+                </div>
+                <div id="segment-2" class="segment-container">
+                    <div id="color-2" class="color-segment w-full h-full bg-green-600 active:ring-4 active:ring-green-400" onclick="handleColorClick(2)"></div>
+                </div>
+                <div id="segment-3" class="segment-container">
+                    <div id="color-3" class="color-segment w-full h-full bg-yellow-600 active:ring-4 active:ring-yellow-400" onclick="handleColorClick(3)"></div>
+                </div>
+                <div id="segment-4" class="segment-container">
+                    <div id="color-4" class="color-segment w-full h-full bg-purple-600 active:ring-4 active:ring-purple-400" onclick="handleColorClick(4)"></div>
+                </div>
+
+                <!-- Central Status Display -->
+                <div class="absolute inset-0 m-auto w-24 h-24 bg-gray-900 rounded-full flex items-center justify-center border-4 border-gray-700 shadow-inner">
+                    <p id="game-status" class="text-sm text-center font-semibold text-accent-yellow">Siap</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer/Instructions -->
+        <footer class="text-center text-gray-500 text-sm mt-4">
+            <p>&copy; 2026 Nusabit - SimonColor Memory Game</p>
+        </footer>
+
+    </div>
+
+    <script>
+        const colorElements = [
+            document.getElementById('color-0'),
+            document.getElementById('color-1'),
+            document.getElementById('color-2'),
+            document.getElementById('color-3'),
+            document.getElementById('color-4'),
+        ];
+
+        const startButton = document.getElementById('start-button');
+        const levelDisplay = document.getElementById('level-display');
+        const scoreDisplay = document.getElementById('score-display');
+        const gameStatus = document.getElementById('game-status');
+
+        let gameSequence = [];
+        let playerSequence = [];
+        let level = 1;
+        let isPlayerTurn = false;
+        let isGameActive = false;
+        let playerSequenceIndex = 0;
+        let maxScore = localStorage.getItem('maxScoreSimon') || 0;
+
+        scoreDisplay.textContent = maxScore;
+
+        // --- Utility Functions ---
+
+        function updateStatus(message) {
+            gameStatus.textContent = message;
+        }
+
+        function toggleClickable(canClick) {
+            colorElements.forEach(el => {
+                el.style.pointerEvents = canClick ? 'auto' : 'none';
+                if (!canClick) {
+                    el.classList.add('opacity-50');
+                } else {
+                    el.classList.remove('opacity-50');
+                }
+            });
+        }
+
+        function flashColor(element) {
+            return new Promise(resolve => {
+                element.classList.add('active');
+                setTimeout(() => {
+                    element.classList.remove('active');
+                    setTimeout(resolve, 100); // Small pause between flashes
+                }, 400); // Flash duration
+            });
+        }
+
+        function getRandomColorIndex() {
+            return Math.floor(Math.random() * 5);
+        }
+
+        // --- Game Logic ---
+
+        function startGame() {
+            if (isGameActive) return;
+
+            gameSequence = [];
+            level = 1;
+            playerSequenceIndex = 0;
+            isGameActive = true;
+            isPlayerTurn = false;
+            startButton.disabled = true;
+            levelDisplay.textContent = level;
+            
+            updateStatus('Mulai...');
+            nextLevel();
+        }
+
+        async function playSequence() {
+            updateStatus('Lihat urutan');
+            toggleClickable(false);
+            
+            // Short delay before showing sequence
+            await new Promise(resolve => setTimeout(resolve, 800));
+
+            for (const index of gameSequence) {
+                const element = colorElements[index];
+                await flashColor(element);
+            }
+
+            // Sequence finished, player turn starts
+            isPlayerTurn = true;
+            playerSequenceIndex = 0;
+            updateStatus('Giliran Anda');
+            toggleClickable(true);
+        }
+
+        function handleColorClick(index) {
+            if (!isGameActive || !isPlayerTurn) return;
+
+            const clickedColor = index;
+            playerSequence.push(clickedColor);
+
+            // Give visual/sound feedback immediately
+            flashColor(colorElements[index]);
+
+            // Check if the move is correct
+            if (clickedColor === gameSequence[playerSequenceIndex]) {
+                playerSequenceIndex++;
+
+                // Check if the entire sequence is complete
+                if (playerSequenceIndex === gameSequence.length) {
+                    // Sequence correct! Advance level
+                    isPlayerTurn = false;
+                    playerSequence = [];
+                    updateStatus('Sukses! Lanjut.');
+                    setTimeout(nextLevel, 1000);
+                }
+            } else {
+                // Wrong move! Game Over
+                gameOver();
+            }
+        }
+
+        function nextLevel() {
+            levelDisplay.textContent = level;
+            playerSequence = [];
+            playerSequenceIndex = 0;
+
+            // Update Max Score
+            if (level - 1 > maxScore) {
+                maxScore = level - 1;
+                localStorage.setItem('maxScoreSimon', maxScore);
+                scoreDisplay.textContent = maxScore;
+            }
+
+            // Add new item to sequence
+            const newColorIndex = getRandomColorIndex();
+            gameSequence.push(newColorIndex);
+            
+            level++; // Prepare for the next round (current round is level - 1 length)
+            
+            playSequence();
+        }
+
+        function gameOver() {
+            isGameActive = false;
+            isPlayerTurn = false;
+            toggleClickable(false);
+            startButton.disabled = false;
+            startButton.textContent = 'Main Lagi';
+
+            // Visual feedback for failure
+            document.body.classList.add('bg-red-900');
+            setTimeout(() => {
+                document.body.classList.remove('bg-red-900');
+            }, 500);
+
+            updateStatus(`Game Over! (Skor: ${gameSequence.length - 1})`);
+            levelDisplay.textContent = '-';
+        }
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            toggleClickable(false);
+            startButton.addEventListener('click', startGame);
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <link rel="icon" type="image/png" href="https://nusabit.com/assets/logo-48.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tugas 1 - Minat Belajar Pemrograman</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#0EA5E9',
+                        'secondary': '#06B6D4',
+                        'tertiary': '#7DD3FC',
+                        'dark-bg': '#0F172A',
+                        'card-bg': '#1E293B',
+                    },
+                    fontFamily: { 
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body { scroll-behavior: smooth; }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        
+        .glass-card {
+            background: rgba(30, 41, 59, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(14, 165, 233, 0.2);
+        }
+
+        .custom-scroll::-webkit-scrollbar { width: 8px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #0F172A; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #0EA5E9; }
+
+        .form-input {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(31, 41, 55, 0.8);
+            border: 1px solid #374151;
+            color: #e5e7eb;
+        }
+        .form-input:focus {
+            border-color: #0EA5E9;
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
+            outline: none;
+        }
+        .form-input::placeholder { color: #6b7280; }
+
+        .option-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        .option-card:hover {
+            border-color: #0EA5E9;
+            background: rgba(14, 165, 233, 0.05);
+        }
+        .option-card input:checked + .option-label {
+            color: #0EA5E9;
+            font-weight: 700;
+        }
+
+        /* Custom checkbox & radio */
+        input[type="radio"], input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #475569;
+            border-radius: 50%;
+            outline: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        input[type="radio"]:checked {
+            border-color: #0EA5E9;
+            background: #0EA5E9;
+            box-shadow: inset 0 0 0 3px #1E293B;
+        }
+        input[type="checkbox"] {
+            border-radius: 4px;
+        }
+        input[type="checkbox"]:checked {
+            border-color: #0EA5E9;
+            background: #0EA5E9;
+            box-shadow: inset 0 0 0 2px #1E293B;
+        }
+    </style>
+</head>
+<body class="bg-dark-bg text-gray-100 font-sans min-h-screen overflow-x-hidden custom-scroll selection:bg-primary selection:text-white">
+
+    <!-- Floating Background -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-primary/15 rounded-full blur-[100px] animate-pulse"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-tertiary/10 rounded-full blur-[100px] animate-pulse" style="animation-delay: 2s;"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-dark-bg/90 backdrop-blur-xl border-b border-primary/30 shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-pen-clip text-white text-sm"></i>
+                    </div>
+                    <span class="font-black text-xl tracking-tight">Tugas<span class="text-primary font-extrabold">1</span></span>
+                </div>
+                <div class="flex gap-3 items-center">
+                    <a href="materi-1.html" class="text-gray-300 hover:text-primary transition-all text-sm font-semibold flex items-center gap-1 px-3 py-1.5 rounded-lg border border-transparent hover:border-primary/30">
+                        <i class="fas fa-arrow-left"></i> Materi 1
+                    </a>
+                    <a href="index.php" class="text-gray-400 hover:text-white transition-colors text-sm">
+                        <i class="fas fa-home"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-3xl mx-auto pt-28 pb-16 px-4 sm:px-6 lg:px-8 relative z-10">
+
+        <!-- Header -->
+        <header class="text-center mb-12 reveal active">
+            <div class="inline-flex flex-col items-center mb-6">
+                <div class="w-20 h-20 bg-gradient-to-br from-primary via-secondary to-tertiary rounded-3xl flex items-center justify-center shadow-2xl border-4 border-white/20 mb-3">
+                    <i class="fas fa-question text-3xl text-white drop-shadow-lg"></i>
+                </div>
+                <span class="px-4 py-1.5 bg-primary/20 text-xs font-bold rounded-full text-primary border border-primary/30 uppercase tracking-wider">Tugas 1</span>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-black text-white mb-4 leading-tight">
+                Kenali <span class="bg-gradient-to-r from-primary via-tertiary to-sky-300 bg-clip-text text-transparent">Minatmu</span>!
+            </h1>
+            <p class="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
+                Sebelum kita mulai petualangan belajar, yuk isi dulu survei kecil ini biar kita tahu 
+                <strong class="text-tertiary">minat</strong> dan <strong class="text-primary">pengalaman</strong>mu dalam dunia pemrograman! 🚀
+            </p>
+        </header>
+
+        <!-- Form Card -->
+        <div class="glass-card p-8 md:p-10 rounded-3xl border border-primary/20 reveal">
+            <form id="tugasForm" action="submit_tugas.php" method="POST" onsubmit="return kirimJawaban(event)" class="space-y-10">
+                <!-- Hidden fields for submission -->
+                <input type="hidden" name="materi_soal" value="tugas-1">
+                <input type="hidden" name="jawaban_1" id="hidden_j1" value="">
+                <input type="hidden" name="jawaban_2" id="hidden_j2" value="">
+                <input type="hidden" name="jawaban_3" id="hidden_j3" value="">
+
+                <!-- Soal 1: Minat Belajar -->
+                <div class="space-y-5">
+                    <div class="flex items-center gap-3">
+                        <span class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center text-white font-black text-sm shadow-lg flex-shrink-0">1</span>
+                        <h2 class="text-2xl font-bold text-white">Minat Belajar Pemrograman</h2>
+                    </div>
+                    <p class="text-gray-400 ml-13 pl-1">Apa yang paling ingin kamu pelajari di dunia pemrograman? <span class="text-red-400">*</span></p>
+
+                    <div class="grid gap-3">
+                        <label class="option-card flex items-center gap-4 p-4 rounded-2xl bg-gray-800/50 border border-gray-700">
+                            <input type="radio" name="minat" value="Membuat Website">
+                            <span class="option-label text-gray-300 text-base">🌐 <strong>Membuat Website</strong> — Pengen bikin halaman web sendiri</span>
+                        </label>
+                        <label class="option-card flex items-center gap-4 p-4 rounded-2xl bg-gray-800/50 border border-gray-700">
+                            <input type="radio" name="minat" value="Membuat Game">
+                            <span class="option-label text-gray-300 text-base">🎮 <strong>Membuat Game</strong> — Pengen bikin game sendiri, seru!</span>
+                        </label>
+                        <label class="option-card flex items-center gap-4 p-4 rounded-2xl bg-gray-800/50 border border-gray-700">
+                            <input type="radio" name="minat" value="Aplikasi Mobile">
+                            <span class="option-label text-gray-300 text-base">📱 <strong>Aplikasi Mobile</strong> — Pengen bikin app HP/Android</span>
+                        </label>
+                        <label class="option-card flex items-center gap-4 p-4 rounded-2xl bg-gray-800/50 border border-gray-700">
+                            <input type="radio" name="minat" value="Robotika / IoT">
+                            <span class="option-label text-gray-300 text-base">🤖 <strong>Robotika / IoT</strong> — Coding untuk robot dan alat elektronik</span>
+                        </label>
+                        <label class="option-card flex items-center gap-4 p-4 rounded-2xl bg-gray-800/50 border border-gray-700">
+                            <input type="radio" name="minat" value="AI / Data Science">
+                            <span class="option-label text-gray-300 text-base">🧠 <strong>AI / Data Science</strong> — Kecerdasan buatan dan analisis data</span>
+                        </label>
+                        <label class="option-card flex items-center gap-4 p-4 rounded-2xl bg-gray-800/50 border border-gray-700">
+                            <input type="radio" name="minat" value="Lainnya">
+                            <span class="option-label text-gray-300 text-base">✨ <strong>Lainnya</strong> — Ada bidang lain yang menarik!</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Soal 2: Pengalaman Koding -->
+                <div class="space-y-5">
+                    <div class="flex items-center gap-3">
+                        <span class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center text-white font-black text-sm shadow-lg flex-shrink-0">2</span>
+                        <h2 class="text-2xl font-bold text-white">Pengalaman Koding</h2>
+                    </div>
+                    <p class="text-gray-400 ml-13 pl-1">Materi / bahasa pemrograman apa saja yang sudah pernah kamu pelajari sebelumnya? <span class="text-gray-500">(boleh centang lebih dari satu)</span></p>
+
+                    <div class="grid gap-3">
+                        <label class="option-card flex items-center gap-4 p-4 rounded-2xl bg-gray-800/50 border border-gray-700">
+                            <input type="checkbox" name="pengalaman" value="HTML">
+                            <span class="option-label text-gray-300 text-base"><i class="fab fa-html5 text-orange-500 mr-1"></i> <strong>HTML</strong> — Struktur halaman web</span>
+                        </label>
+                        <label class="option-card flex items-center gap-4 p-4 rounded-2xl bg-gray-800/50 border border-gray-700">
+                            <input type="checkbox" name="pengalaman" value="CSS">
+                            <span class="option-label text-gray-300 text-base"><i class="fab fa-css3-alt text-blue-500 mr-1"></i> <strong>CSS</strong> — Menghias & styling web</span>
+                        </label>
+                        <label class="option-card flex items-center gap-4 p-4 rounded-2xl bg-gray-800/50 border border-gray-700">
+                            <input type="checkbox" name="pengalaman" value="JavaScript">
+                            <span class="option-label text-gray-300 text-base"><i class="fab fa-js text-yellow-500 mr-1"></i> <strong>JavaScript</strong> — Bikin web jadi interaktif</span>
+                        </label>
+                        <label class="option-card flex items-center gap-4 p-4 rounded-2xl bg-gray-800/50 border border-gray-700">
+                            <input type="checkbox" name="pengalaman" value="PHP">
+                            <span class="option-label text-gray-300 text-base"><i class="fab fa-php text-purple-500 mr-1"></i> <strong>PHP</strong> — Backend & database</span>
+                        </label>
+                        <label class="option-card flex items-center gap-4 p-4 rounded-2xl bg-gray-800/50 border border-gray-700">
+                            <input type="checkbox" name="pengalaman" value="Python">
+                            <span class="option-label text-gray-300 text-base"><i class="fab fa-python text-blue-400 mr-1"></i> <strong>Python</strong> — Bahasa serbaguna, AI, data</span>
+                        </label>
+                        <label class="option-card flex items-center gap-4 p-4 rounded-2xl bg-gray-800/50 border border-gray-700">
+                            <input type="checkbox" name="pengalaman" value="Scratch / Blockly">
+                            <span class="option-label text-gray-300 text-base">🧩 <strong>Scratch / Blockly</strong> — Coding visual dengan blok-blok</span>
+                        </label>
+                        <label class="option-card flex items-center gap-4 p-4 rounded-2xl bg-gray-800/50 border border-gray-700">
+                            <input type="checkbox" name="pengalaman" value="Belum pernah">
+                            <span class="option-label text-gray-300 text-base">🆕 <strong>Belum pernah</strong> — Ini pertama kalinya belajar coding!</span>
+                        </label>
+                        <label class="option-card flex items-center gap-4 p-4 rounded-2xl bg-gray-800/50 border border-gray-700">
+                            <input type="checkbox" name="pengalaman" value="Lainnya">
+                            <span class="option-label text-gray-300 text-base">➕ <strong>Lainnya</strong> — Bahasa atau materi lain...</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Soal 3: Nama (opsional untuk identifikasi) -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <span class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center text-white font-black text-sm shadow-lg flex-shrink-0">
+                            <i class="fas fa-user"></i>
+                        </span>
+                        <h2 class="text-2xl font-bold text-white">Identitas Diri <span class="text-sm font-normal text-gray-500">(opsional)</span></h2>
+                    </div>
+                    <p class="text-gray-400 ml-13 pl-1">Boleh diisi kalau kamu mau dikenal oleh pengajar 😊</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-1.5">Nama Panggilan</label>
+                            <input type="text" name="nama" placeholder="Contoh: Budi" class="form-input w-full p-4 rounded-2xl text-base">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-1.5">Kelas / Jenjang</label>
+                            <select name="jenjang" class="form-input w-full p-4 rounded-2xl text-base">
+                                <option value="">— Pilih —</option>
+                                <option value="SD">SD</option>
+                                <option value="SMP" selected>SMP</option>
+                                <option value="SMA">SMA</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tombol Kirim -->
+                <div class="pt-4">
+                    <button type="submit" class="w-full bg-gradient-to-r from-primary to-secondary hover:from-sky-600 hover:to-cyan-600 text-white font-black py-5 px-8 rounded-2xl text-xl shadow-2xl hover:shadow-sky-500/30 transition-all flex items-center justify-center gap-3">
+                        <i class="fas fa-paper-plane"></i>
+                        Kirim Jawaban
+                    </button>
+                    <p class="text-center text-gray-500 text-xs mt-3">Data ini membantu kami menyusun materi yang sesuai untukmu 🙌</p>
+                </div>
+
+            </form>
+
+            <!-- Respon setelah submit -->
+            <div id="hasilSubmit" class="hidden mt-8 p-8 rounded-3xl text-center border-2 border-emerald-500/30 bg-emerald-500/5">
+                <div class="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-check-circle text-emerald-400 text-3xl"></i>
+                </div>
+                <h3 class="text-2xl font-black text-emerald-300 mb-2">Terima kasih! 🎉</h3>
+                <p class="text-gray-300">Jawabanmu sudah tercatat. Yuk lanjut belajar di <strong class="text-primary">Materi 1</strong>!</p>
+                <a href="materi-1.html" class="inline-flex items-center gap-2 mt-6 px-8 py-3 bg-primary hover:bg-sky-600 text-white font-bold rounded-2xl transition-all">
+                    <i class="fas fa-arrow-right"></i> Lanjut ke Materi 1
+                </a>
+            </div>
+        </div>
+
+        <!-- Tips -->
+        <div class="mt-8 p-6 bg-yellow-500/5 border border-yellow-500/20 rounded-2xl reveal">
+            <div class="flex items-start gap-3">
+                <i class="fas fa-lightbulb text-yellow-400 text-xl mt-1"></i>
+                <div>
+                    <h4 class="text-yellow-300 font-bold text-sm mb-1">💡 Kenapa survei ini penting?</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Dengan tahu minat dan pengalamanmu, kita bisa <strong class="text-white">menyesuaikan materi</strong> biar belajar jadi lebih seru 
+                        dan pas dengan kebutuhanmu! Jadi jangan sungkan mengisi ya 😊
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark-bg border-t border-primary/20 py-10 mt-8">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <p class="text-gray-500 text-sm">© 2026 Nusabit Code Kitchen - Tugas 1: Kenali Minatmu 🚀</p>
+        </div>
+    </footer>
+
+    <script>
+        function kirimJawaban(event) {
+            event.preventDefault();
+
+            let minatEl = document.querySelector('input[name="minat"]:checked');
+            let minat = minatEl ? minatEl.value : null;
+
+            if (!minat) {
+                alert('Yuk pilih salah satu minat belajarmu dulu! 😊');
+                return;
+            }
+
+            // Gabung jawaban jadi hidden inputs
+            let pengalamanEls = document.querySelectorAll('input[name="pengalaman"]:checked');
+            let pengalaman = [];
+            pengalamanEls.forEach(el => pengalaman.push(el.value));
+            let nama = document.querySelector('input[name="nama"]').value.trim();
+            let jenjang = document.querySelector('select[name="jenjang"]').value;
+
+            // Set hidden fields
+            document.getElementById('hidden_j1').value = 'Minat: ' + minat;
+            document.getElementById('hidden_j2').value = 'Pengalaman: ' + pengalaman.join(', ');
+            document.getElementById('hidden_j3').value = 'Nama: ' + (nama || 'anonim') + ' | Jenjang: ' + jenjang;
+
+            // Submit form secara normal (biar PHP redirect work)
+            document.getElementById('tugasForm').submit();
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
+

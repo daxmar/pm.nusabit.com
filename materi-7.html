@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <link rel="icon" type="image/png" href="https://nusabit.com/assets/logo-48.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materi Pertemuan 7 - Sejarah Web & Semantic Mastery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#6366F1', // Indigo/Purple for semantic/history theme
+                        'secondary': '#8B5CF6',
+                        'dark-bg': '#0F172A',
+                        'card-bg': '#1E293B',
+                        'code-bg': '#282C34',
+                    },
+                    fontFamily: { 
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { scroll-behavior: smooth; }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        
+        .code-preview { 
+            background: #282c34; 
+            color: #abb2bf; 
+            padding: 1.5rem; 
+            border-radius: 0.75rem; 
+            font-family: 'Fira Code', monospace; 
+            overflow-x: auto; 
+            border: 1px solid #374151;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Syntax Highlighting */
+        .tag { color: #e06c75; }
+        .attr { color: #d19a66; }
+        .val { color: #98c379; }
+        .txt { color: #abb2bf; }
+        .comment { color: #5c6370; font-style: italic; }
+        .doctype { color: #c678dd; }
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .timeline-item { position: relative; }
+        .timeline-item::before { content: ''; position: absolute; left: 20px; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--primary), var(--secondary)); }
+        .timeline-dot { position: absolute; left: 12px; width: 20px; height: 20px; background: var(--primary); border-radius: 50%; border: 4px solid white; z-index: 1; }
+
+        .custom-scroll::-webkit-scrollbar { width: 8px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #0F172A; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #6366F1; border-radius: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #8B5CF6; }
+    </style>
+</head>
+<body class="bg-dark-bg text-gray-100 font-sans min-h-screen overflow-x-hidden custom-scroll selection:bg-primary selection:text-white">
+
+    <!-- Background Elements -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-primary/20 rounded-full blur-[100px] animate-pulse-slow"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-secondary/20 rounded-full blur-[100px] animate-pulse-slow" style="animation-delay: 2s;"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-dark-bg/80 backdrop-blur-md border-b border-primary/30 shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <i class="fab fa-html5 text-3xl text-primary"></i>
+                    <span class="font-bold text-xl tracking-tight">Materi<span class="text-primary">7</span></span>
+                </div>
+                <div class="flex gap-4">
+                    <a href="materi-6.html" class="text-gray-300 hover:text-primary transition-colors text-sm font-bold flex items-center gap-2 px-4 py-2 rounded-xl border border-transparent hover:border-primary">
+                        ← Materi 6
+                    </a>
+                    <a href="index.php" class="text-gray-300 hover:text-white transition-colors text-sm font-medium flex items-center gap-2">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                    <a href="playground-1.html" class="bg-primary hover:bg-indigo-600 text-white px-6 py-2 rounded-xl text-sm font-bold transition-all shadow-lg shadow-primary/20 flex items-center gap-2">
+                        <i class="fas fa-code"></i> Playground
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-6xl mx-auto pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+        
+        <!-- Hero Section -->
+        <header class="text-center mb-24 reveal active">
+            <div class="inline-block mb-8 animate-float">
+                <i class="fas fa-globe text-8xl text-transparent bg-clip-text bg-gradient-to-br from-indigo-400 to-purple-600 drop-shadow-2xl"></i>
+            </div>
+            <h1 class="text-5xl md:text-7xl font-black text-white mb-8 tracking-tight">
+                Sejarah Web & <span class="text-primary bg-gradient-to-r from-primary to-secondary bg-clip-text">Semantic Mastery</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed mb-12">
+                Dari HTML sederhana 1991 hingga HTML5 modern + PHP dinamis. Kuasai semantic tags, tables, media untuk web profesional!
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-6">
+                <a href="#history" class="px-10 py-4 bg-primary hover:bg-indigo-600 text-white rounded-3xl font-black transition-all shadow-2xl hover:shadow-indigo-500/50">
+                    Mulai Sejarah <i class="fas fa-clock-rotate-left ml-3"></i>
+                </a>
+            </div>
+        </header>
+
+        <!-- Section 1: Complete Web History -->
+        <section id="history" class="mb-32 reveal">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-black text-white mb-6">Sejarah Lengkap: HTML → PHP → HTML5</h2>
+                <p class="text-xl text-gray-400 max-w-4xl mx-auto">Perjalanan web dari dokumen statis ke aplikasi dinamis interaktif!</p>
+            </div>
+            
+            <div class="max-w-5xl mx-auto">
+                <!-- Timeline -->
+                <div class="space-y-12">
+                    <div class="timeline-item flex gap-8 items-start">
+                        <div class="timeline-dot" style="top: 20px;"></div>
+                        <div class="flex-1 ml-8">
+                            <div class="flex items-center gap-4 mb-4">
+                                <span class="text-4xl font-black text-primary">1991</span>
+                                <i class="fas fa-rocket text-3xl text-primary"></i>
+                            </div>
+                            <div class="glass-card p-8 rounded-3xl">
+                                <h3 class="text-2xl font-bold text-white mb-4">HTML Lahir - Tim Berners-Lee (CERN)</h3>
+                                <p class="text-gray-300 leading-relaxed">18 tag sederhana untuk berbagi dokumen ilmiah. Hanya teks + link dasar. World Wide Web lahir!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item flex gap-8 items-start">
+                        <div class="timeline-dot" style="top: 10px;"></div>
+                        <div class="flex-1 ml-8">
+                            <div class="flex items-center gap-4 mb-4">
+                                <span class="text-4xl font-black text-primary">1999</span>
+                                <i class="fas fa-code text-3xl text-primary"></i>
+                            </div>
+                            <div class="glass-card p-8 rounded-3xl">
+                                <h3 class="text-2xl font-bold text-white mb-4">HTML 4.01 + CSS1/2</h3>
+                                <p class="text-gray-300 leading-relaxed">Standar stabil. CSS pisah styling dari HTML. Masih butuh Flash untuk video/game.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item flex gap-8 items-start bg-gradient-to-r from-primary/5 p-8 rounded-3xl">
+                        <div class="timeline-dot" style="top: 20px; background: #EC4899;"></div>
+                        <div class="flex-1 ml-8">
+                            <div class="flex items-center gap-4 mb-4">
+                                <span class="text-4xl font-bold text-pink-400">2004</span>
+                                <i class="fas fa-server text-3xl text-pink-400"></i>
+                            </div>
+                            <div class="glass-card p-8 rounded-3xl border-pink-500/30">
+                                <h3 class="text-2xl font-bold text-white mb-4">PHP Server-Side Magic</h3>
+                                <p class="text-gray-300 leading-relaxed">Rasmus Lerdorf ciptakan PHP. Web jadi DINAMIS: database, login, form proses server-side. HTML + PHP = CMS (WordPress)!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item flex gap-8 items-start">
+                        <div class="timeline-dot" style="top: 20px;"></div>
+                        <div class="flex-1 ml-8">
+                            <div class="flex items-center gap-4 mb-4">
+                                <span class="text-4xl font-black text-primary">2014</span>
+                                <i class="fab fa-html5 text-4xl text-primary"></i>
+                            </div>
+                            <div class="glass-card p-8 rounded-3xl shadow-2xl border-4 border-primary/50">
+                                <h3 class="text-3xl font-black text-white mb-6">HTML5 Revolusi!</h3>
+                                <ul class="space-y-3 text-gray-300 text-lg">
+                                    <li><i class="fas fa-video text-green-400 mr-3"></i>Video/Audio native (no Flash)</li>
+                                    <li><i class="fas fa-paint-brush text-blue-400 mr-3"></i>Canvas/SVG untuk game/grafik</li>
+                                    <li><i class="fas fa-mobile-alt text-emerald-400 mr-3"></i>Responsive design mobile-first</li>
+                                    <li><i class="fas fa-globe text-purple-400 mr-3"></i>Semantic tags (header, main)</li>
+                                </ul>
+                                <p class="text-primary font-bold mt-4 text-xl">HTML5 + PHP + JS = Modern Web Apps!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Semantic HTML Deep Dive -->
+        <section class="mb-32 reveal">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-black text-white mb-6">Semantic HTML: Web yang "Bisa Dipahami"</h2>
+                <p class="text-xl text-gray-400">Tag bukan cuma tampilan, tapi MAKNA. Google suka, screen reader suka, developer suka!</p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-12">
+                <div class="code-preview text-lg">
+<<span class="tag">header</span>> Logo + Nav Menu </<span class="tag">header</span>><br>
+<<span class="tag">nav</span>> Link: Home | About | Contact </<span class="tag">nav</span>><br>
+<<span class="tag">main</span>><br>
+&nbsp; <<span class="tag">article</span>> Konten utama artikel </<span class="tag">article</span>><br>
+&nbsp; <<span class="tag">aside</span>> Sidebar iklan </<span class="tag">aside</span>><br>
+</<span class="tag">main</span>><br>
+<<span class="tag">section</span>> Bagian fitur </<span class="tag">section</span>><br>
+<<span class="tag">footer</span>> Copyright 2026 </<span class="tag">footer</span>>
+                </div>
+                <div class="space-y-6">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="glass-card p-6 rounded-2xl hover:shadow-2xl transition-all">
+                            <i class="fas fa-heading text-primary text-3xl mb-4 block"></i>
+                            <h4 class="font-bold text-xl mb-2"><header></h4>
+                            <p class="text-gray-400 text-sm">Bagian atas: logo, search bar</p>
+                        </div>
+                        <div class="glass-card p-6 rounded-2xl hover:shadow-2xl transition-all">
+                            <i class="fas fa-list text-primary text-3xl mb-4 block"></i>
+                            <h4 class="font-bold text-xl mb-2"><section></h4>
+                            <p class="text-gray-400 text-sm">Tema terkait (fitur, testimoni)</p>
+                        </div>
+                        <div class="glass-card p-6 rounded-2xl hover:shadow-2xl transition-all">
+                            <i class="fas fa-newspaper text-primary text-3xl mb-4 block"></i>
+                            <h4 class="font-bold text-xl mb-2"><article></h4>
+                            <p class="text-gray-400 text-sm">Konten mandiri (blog post)</p>
+                        </div>
+                        <div class="glass-card p-6 rounded-2xl hover:shadow-2xl transition-all">
+                            <i class="fas fa-comments text-primary text-3xl mb-4 block"></i>
+                            <h4 class="font-bold text-xl mb-2"><aside></h4>
+                            <p class="text-gray-400 text-sm">Sidebar: iklan, related posts</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Lists & Tables -->
+        <section class="mb-32 reveal">
+            <h2 class="text-4xl md:text-5xl font-black text-white mb-12 text-center">Lists & Tables Mastery</h2>
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h3 class="text-3xl font-bold text-white mb-8"><ol> <ul> <dl></h3>
+                    <div class="space-y-4 mb-8">
+                        <div class="glass-card p-6">
+                            <code class="text-primary font-bold block mb-2"><ol> Ordered List (1,2,3)</code>
+                            <ol class="list-decimal list-inside text-gray-300 ml-6">
+                                <li>Buka browser</li>
+                                <li>Tulis <!DOCTYPE html></li>
+                                <li>Save sebagai .html</li>
+                            </ol>
+                        </div>
+                        <div class="glass-card p-6">
+                            <code class="text-primary font-bold block mb-2"><ul> Unordered (•)</code>
+                            <ul class="list-disc list-inside text-gray-300 ml-6">
+                                <li>Primary: #6366F1</li>
+                                <li>Secondary: #8B5CF6</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="code-preview text-base">
+<<span class="tag">table</span>><br>
+&nbsp; <<span class="tag">thead</span>><br>
+&nbsp;&nbsp;&nbsp; <<span class="tag">tr</span>><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <<span class="tag">th</span>>Nama</<span class="tag">th</span>> <<span class="tag">th</span>>Umur</<span class="tag">th</span>><br>
+&nbsp;&nbsp;&nbsp; </<span class="tag">tr</span>><br>
+&nbsp; </<span class="tag">thead</span>><br>
+&nbsp; <<span class="tag">tbody</span>><br>
+&nbsp;&nbsp;&nbsp; <<span class="tag">tr</span>><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <<span class="tag">td</span>>Budi</<span class="tag">td</span>> <<span class="tag">td</span>>15</<span class="tag">td</span>><br>
+&nbsp;&nbsp;&nbsp; </<span class="tag">tr</span>><br>
+&nbsp; </<span class="tag">tbody</span>><br>
+</<span class="tag">table</span>>
+                </div>
+            </div>
+
+            <!-- Live Table Demo -->
+            <div class="max-w-4xl mx-auto mt-16">
+                <button onclick="generateTableDemo()" class="mx-auto block bg-primary hover:bg-indigo-600 text-white px-12 py-6 rounded-3xl font-black text-xl shadow-2xl hover:shadow-indigo-500/50 transition-all mb-8">
+                    <i class="fas fa-table mr-3"></i>Generate Tabel Siswa Demo
+                </button>
+                <div id="tableDemo" class="glass-card p-8 rounded-3xl overflow-x-auto hidden">
+                    <!-- Generated table will appear here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Media Elements -->
+        <section class="mb-32 reveal">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-black text-white mb-6">Media Modern: Video, Audio, Figure</h2>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="glass-card p-8 rounded-3xl">
+                    <h4 class="font-bold text-xl mb-4 text-white"><video> Native!</h4>
+                    <code class="text-primary font-mono text-sm mb-4 block"><video src="video.mp4" controls></video></code>
+                    <p class="text-gray-400 text-sm">No Flash/YouTube embed needed!</p>
+                </div>
+                <div class="glass-card p-8 rounded-3xl">
+                    <h4 class="font-bold text-xl mb-4 text-white"><audio> Suara</h4>
+                    <code class="text-primary font-mono text-sm mb-4 block"><audio src="song.mp3" controls></audio></code>
+                    <p class="text-gray-400 text-sm">Podcast, efek suara game</p>
+                </div>
+                <div class="glass-card p-8 rounded-3xl">
+                    <h4 class="font-bold text-xl mb-4 text-white"><figure> + <figcaption></h4>
+                    <code class="text-primary font-mono text-sm mb-4 block"><figure><img><figcaption>Caption</figcaption></figure></code>
+                    <p class="text-gray-400 text-sm">Gambar + deskripsi profesional</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Responsive & Accessibility -->
+        <section class="mb-32 reveal">
+            <h2 class="text-4xl md:text-5xl font-black text-white mb-12 text-center">Responsive + Aksesibel</h2>
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="glass-card p-8 rounded-3xl space-y-6">
+                    <h4 class="font-bold text-2xl mb-4">Responsive viewport</h4>
+                    <p class="text-gray-300">Mobile-friendly otomatis!</p>
+                </div>
+                <div class="glass-card p-8 rounded-3xl space-y-6">
+                    <h4 class="font-bold text-2xl mb-4">Accessibility Pro</h4>
+                    <ul class="text-gray-300 space-y-2">
+                        <li>alt pada img></li>
+                        <li>lang="id" pada html></li>
+                        <li>aria-label pada tombol</li>
+                        <li>role="button" pada div clickable</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Challenge -->
+        <section class="reveal">
+            <div class="bg-gradient-to-r from-primary to-secondary rounded-4xl p-16 text-center shadow-3xl">
+                <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl">
+                    <i class="fas fa-trophy text-3xl text-indigo-900"></i>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-black text-white mb-8">Tugas 7: Portfolio Semantic</h2>
+                <p class="text-xl text-white/90 mb-12 max-w-3xl mx-auto">
+                    Buat halaman biodata LENGKAP: semantic structure + table prestasi + video intro + responsive!
+                </p>
+                <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                    <a href="playground-1.html" class="px-10 py-5 bg-white text-primary font-black rounded-3xl shadow-2xl hover:scale-105 transition-all flex items-center justify-center">
+                        <i class="fas fa-laptop-code mr-3"></i> Playground
+                    </a>
+                    <a href="tugas-7.html" class="px-10 py-5 bg-black/50 text-white font-black rounded-3xl border border-white/50 hover:bg-black/70 transition-all flex items-center justify-center">
+                        <i class="fas fa-tasks mr-3"></i> Tugas 7 (Segera!)
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark-bg border-t border-primary/30 py-16 mt-24">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <p class="text-2xl font-bold text-white mb-6">Materi 7 Selesai! 🎉</p>
+            <p class="text-gray-500 mb-8">Dari sejarah web hingga semantic pro. Siap jadi web developer!</p>
+            <div class="flex justify-center gap-6 text-2xl text-gray-500">
+                <i class="fab fa-html5 hover:text-primary transition-colors cursor-pointer"></i>
+                <i class="fab fa-css3-alt hover:text-blue-400"></i>
+                <i class="fab fa-php hover:text-pink-400"></i>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Table Demo Generator
+        function generateTableDemo() {
+            const table = `
+                <table class="w-full border-collapse text-sm">
+                    <thead>
+                        <tr class="bg-primary/20">
+                            <th class="p-4 text-left border-b border-white/20 font-bold text-white">Nama</th>
+                            <th class="p-4 text-left border-b border-white/20 font-bold text-white">Umur</th>
+                            <th class="p-4 text-left border-b border-white/20 font-bold text-white">Kelas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="hover:bg-white/10 transition-colors">
+                            <td class="p-4 border-b border-gray-700">Budi</td>
+                            <td class="p-4 border-b border-gray-700">15</td>
+                            <td class="p-4 border-b border-gray-700">9A</td>
+                        </tr>
+                        <tr class="hover:bg-white/10 transition-colors">
+                            <td class="p-4 border-b border-gray-700">Siti</td>
+                            <td class="p-4 border-b border-gray-700">14</td>
+                            <td class="p-4 border-b border-gray-700">9B</td>
+                        </tr>
+                        <tr class="hover:bg-white/10 transition-colors">
+                            <td class="p-4 border-b border-gray-700">Andi</td>
+                            <td class="p-4 border-b border-gray-700">16</td>
+                            <td class="p-4 border-b border-gray-700">9A</td>
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+            document.getElementById('tableDemo').innerHTML = table;
+            document.getElementById('tableDemo').classList.remove('hidden');
+        }
+
+        // Reveal Observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
+

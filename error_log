@@ -1,0 +1,67 @@
+[04-Feb-2026 08:42:51 Asia/Jakarta] PHP Warning:  Undefined variable $conn in /home/nusabitc/public_html/pemrograman/register.php on line 42
+[04-Feb-2026 08:42:51 Asia/Jakarta] PHP Fatal error:  Uncaught TypeError: mysqli_prepare(): Argument #1 ($mysql) must be of type mysqli, null given in /home/nusabitc/public_html/pemrograman/register.php:42
+Stack trace:
+#0 /home/nusabitc/public_html/pemrograman/register.php(42): mysqli_prepare(NULL, 'SELECT id FROM ...')
+#1 {main}
+  thrown in /home/nusabitc/public_html/pemrograman/register.php on line 42
+[04-Feb-2026 02:26:02 UTC] PHP Warning:  require(vendor/autoload.php): Failed to open stream: No such file or directory in /home/nusabitc/public_html/pemrograman/materi-2.php on line 2
+[04-Feb-2026 02:26:02 UTC] PHP Warning:  require(vendor/autoload.php): Failed to open stream: No such file or directory in /home/nusabitc/public_html/pemrograman/materi-2.php on line 2
+[04-Feb-2026 02:26:02 UTC] PHP Fatal error:  Uncaught Error: Failed opening required 'vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/nusabitc/public_html/pemrograman/materi-2.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/nusabitc/public_html/pemrograman/materi-2.php on line 2
+[04-Feb-2026 02:26:38 UTC] PHP Warning:  require(vendor/autoload.php): Failed to open stream: No such file or directory in /home/nusabitc/public_html/pemrograman/materi-2.php on line 2
+[04-Feb-2026 02:26:38 UTC] PHP Warning:  require(vendor/autoload.php): Failed to open stream: No such file or directory in /home/nusabitc/public_html/pemrograman/materi-2.php on line 2
+[04-Feb-2026 02:26:38 UTC] PHP Fatal error:  Uncaught Error: Failed opening required 'vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/nusabitc/public_html/pemrograman/materi-2.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/nusabitc/public_html/pemrograman/materi-2.php on line 2
+[04-Feb-2026 09:55:05 Asia/Jakarta] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'nusabitc_pemrograman.quiz_answers' doesn't exist in /home/nusabitc/public_html/pemrograman/submit_tugas.php:27
+Stack trace:
+#0 /home/nusabitc/public_html/pemrograman/submit_tugas.php(27): mysqli_prepare(Object(mysqli), 'INSERT INTO qui...')
+#1 {main}
+  thrown in /home/nusabitc/public_html/pemrograman/submit_tugas.php on line 27
+[04-Feb-2026 07:02:59 UTC] PHP Parse error:  Unclosed '{' on line 13 in /home/nusabitc/public_html/pemrograman/.config/config.php on line 34
+[04-Feb-2026 14:04:04 Asia/Jakarta] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'role' in 'SELECT' in /home/nusabitc/public_html/pemrograman/login.php:25
+Stack trace:
+#0 /home/nusabitc/public_html/pemrograman/login.php(25): mysqli_prepare(Object(mysqli), 'SELECT id, user...')
+#1 {main}
+  thrown in /home/nusabitc/public_html/pemrograman/login.php on line 25
+[04-Feb-2026 14:05:30 Asia/Jakarta] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'role' in 'SELECT' in /home/nusabitc/public_html/pemrograman/login.php:21
+Stack trace:
+#0 /home/nusabitc/public_html/pemrograman/login.php(21): mysqli_prepare(Object(mysqli), 'SELECT id, user...')
+#1 {main}
+  thrown in /home/nusabitc/public_html/pemrograman/login.php on line 21
+[04-Feb-2026 14:05:57 Asia/Jakarta] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'role' in 'SELECT' in /home/nusabitc/public_html/pemrograman/login.php:25
+Stack trace:
+#0 /home/nusabitc/public_html/pemrograman/login.php(25): mysqli_prepare(Object(mysqli), 'SELECT id, user...')
+#1 {main}
+  thrown in /home/nusabitc/public_html/pemrograman/login.php on line 25
+[04-Feb-2026 14:06:01 Asia/Jakarta] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'role' in 'SELECT' in /home/nusabitc/public_html/pemrograman/login.php:25
+Stack trace:
+#0 /home/nusabitc/public_html/pemrograman/login.php(25): mysqli_prepare(Object(mysqli), 'SELECT id, user...')
+#1 {main}
+  thrown in /home/nusabitc/public_html/pemrograman/login.php on line 25
+[04-Feb-2026 14:18:21 Asia/Jakarta] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'role' in 'SELECT' in /home/nusabitc/public_html/pemrograman/login.php:25
+Stack trace:
+#0 /home/nusabitc/public_html/pemrograman/login.php(25): mysqli_prepare(Object(mysqli), 'SELECT id, user...')
+#1 {main}
+  thrown in /home/nusabitc/public_html/pemrograman/login.php on line 25
+[23-Jul-2026 13:14:00 Asia/Jakarta] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/nusabitc/pm.nusabit.com/.config/config.php:19
+Stack trace:
+#0 /home/nusabitc/pm.nusabit.com/.config/config.php(19): mysqli_connect('localhost', 'root', '', 'nusabitc_pemrog...')
+#1 /home/nusabitc/pm.nusabit.com/index.php(3): require_once('/home/nusabitc/...')
+#2 {main}
+  thrown in /home/nusabitc/pm.nusabit.com/.config/config.php on line 19
+[23-Jul-2026 13:14:11 Asia/Jakarta] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/nusabitc/pm.nusabit.com/.config/config.php:19
+Stack trace:
+#0 /home/nusabitc/pm.nusabit.com/.config/config.php(19): mysqli_connect('localhost', 'root', '', 'nusabitc_pemrog...')
+#1 /home/nusabitc/pm.nusabit.com/index.php(3): require_once('/home/nusabitc/...')
+#2 {main}
+  thrown in /home/nusabitc/pm.nusabit.com/.config/config.php on line 19
+[23-Jul-2026 13:15:00 Asia/Jakarta] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/nusabitc/pm.nusabit.com/.config/config.php:19
+Stack trace:
+#0 /home/nusabitc/pm.nusabit.com/.config/config.php(19): mysqli_connect('localhost', 'root', '', 'nusabitc_pemrog...')
+#1 /home/nusabitc/pm.nusabit.com/index.php(3): require_once('/home/nusabitc/...')
+#2 {main}
+  thrown in /home/nusabitc/pm.nusabit.com/.config/config.php on line 19

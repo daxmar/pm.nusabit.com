@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tips Pro onclick - Materi 5</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
+        .tip { background: white; margin: 20px 0; padding: 20px; border-left: 5px solid #10b981; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .tip h3 { color: #10b981; margin-top: 0; }
+        code { background: #f0f0f0; padding: 2px 5px; border-radius: 4px; font-family: monospace; }
+        .example { background: #f8f9fa; padding: 15px; border-radius: 6px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Tips Pro onclick untuk Pemula SMP</h1>
+    
+    <div class="tip">
+        <h3>1. Function JS - Kode Panjang Jadi Rapi</h3>
+        <p>Jangan tulis kode panjang langsung di onclick. Buat function di <code><script></code>!</p>
+        <div class="example">
+            <code><button onclick="tukarWarna()">Tukar</button></code><br>
+            <code><script><br>
+            function tukarWarna() {<br>
+                document.getElementById('kotak').style.background = 'blue';<br>
+            }<br>
+            </script></code>
+        </div>
+        <p><strong>Kenapa?** Kode rapi, mudah diubah, bisa dipakai berulang!</p>
+    </div>
+
+    <div class="tip">
+        <h3>2. Tampil/Sembunyi Elemen (Surprise Effect)</h3>
+        <p>Gunakan <code>display: 'none/block'</code> untuk munculkan/sembunyikan teks/gambar.</p>
+        <div class="example">
+            <code><div id="rahasia" style="display:none;">Rahasia nih!</div></code><br>
+            <code><button onclick="document.getElementById('rahasia').style.display='block'">Tampilkan</button></code>
+        </div>
+        <p><strong>Contoh game:** Petunjuk tersembunyi yang muncul saat klik "Help". Super keren!</p>
+    </div>
+
+    <div class="tip">
+        <h3>3. Hitung Matematika Sederhana</h3>
+        <p>onclick bisa hitung langsung + tampil hasil!</p>
+        <div class="example">
+            <code><p id="hasil">?</p></code><br>
+            <code><button onclick="document.getElementById('hasil').innerHTML = 2+3*4">Hitung 2+3×4</button></code>
+        </div>
+        <p><strong>Hasil:** 14! Bisa buat kalkulator mini tombol-tombol.</p>
+    </div>
+
+    <div class="tip">
+        <h3>4. Variabel Penghitung (Skor Game)</h3>
+        <p>Buat variabel global untuk skor.</p>
+        <div class="example">
+            <code><script>let skor = 0;</script></code><br>
+            <code><button onclick="skor++; alert('Skor: '+skor)">+1 Poin</button></code>
+        </div>
+        <p><strong>Game tip:** Tampilkan <code>document.getElementById('skor').innerHTML = skor;</code> real-time!</p>
+    </div>
+
+    <div class="tip">
+        <h3>5. onclick di Bukan Tombol (Gambar/Div)</h3>
+        <p>Apa saja bisa diklik! Gambar, kotak teks, apa aja!</p>
+        <div class="example">
+            <code><div style="width:100px;height:100px;background:blue;" onclick="alert('Kotak diklik!')"></div></code>
+        </div>
+        <p><strong>Game:** Peta klik area = lompat lokasi!</p>
+    </div>
+
+    <div class="tip">
+        <h3>6. Kombinasi onclick + style Inline</h3>
+        <p>Gabung 2 ilmu materi 4 (style) + 5 (onclick).</p>
+        <div class="example">
+            <code><button onclick="this.style.background='gold'; this.innerHTML='Udah Keren!'">Klik Me</button></code>
+        </div>
+        <p><strong>'this' = tombol itu sendiri!** Ubah warnanya sendiri.</p>
+    </div>
+
+    <p><strong>Semua tips ini bisa dicoba langsung di playground-1.html!</strong></p>
+</body>
+</html>

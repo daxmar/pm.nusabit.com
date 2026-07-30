@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <link rel="icon" type="image/png" href="https://nusabit.com/assets/logo-48.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tugas Pertemuan 3 - HTML Dasar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#F97316', // Orange HTML5
+                        'dark-bg': '#111827',
+                        'card-bg': '#1F2937',
+                    },
+                    fontFamily: { 
+                        sans: ['Poppins', 'sans-serif'],
+                        mono: ['Roboto Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #1f2937; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #F97316; }
+    </style>
+</head>
+<body class="bg-dark-bg text-gray-100 font-sans min-h-screen p-4">
+
+    <!-- Access Modal -->
+    <div id="access-modal" class="fixed inset-0 bg-dark-bg z-[60] flex items-center justify-center p-4">
+        <div class="bg-card-bg p-8 rounded-2xl border border-primary/50 shadow-2xl max-w-sm w-full text-center">
+            <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 text-primary">
+                <i class="fas fa-lock text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2 text-white">Tugas Terkunci</h3>
+            <p class="text-gray-400 text-sm mb-6">Masukkan password untuk membuka tugas ini.</p>
+            <input type="password" id="task-pass-input" placeholder="Password..." class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 text-center text-white focus:outline-none focus:border-primary mb-4 transition-all" autofocus>
+            <p id="access-error" class="text-red-500 text-xs mb-4 hidden">Password salah!</p>
+            <button onclick="checkTaskPass()" class="w-full py-3 bg-primary hover:bg-orange-600 text-white font-bold rounded-lg transition-all shadow-lg">
+                Buka Tugas
+            </button>
+            <a href="index.php" class="block mt-4 text-gray-500 hover:text-white text-sm">Kembali ke Home</a>
+        </div>
+    </div>
+
+    <div id="main-content" class="max-w-4xl mx-auto hidden">
+        <header class="text-center mb-8 py-6 border-b-2 border-primary/50">
+            <h1 class="text-3xl font-extrabold text-primary flex items-center justify-center space-x-3">
+                <i class="fab fa-html5"></i> <span>Tugas Pertemuan 3</span>
+            </h1>
+            <p class="text-gray-400 mt-2">Praktek Membuat Biodata Diri dengan HTML</p>
+            <div class="flex justify-center gap-4 mt-4">
+                <a href="index.php" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-bold rounded-lg transition-all text-sm">
+                    <i class="fas fa-home mr-2"></i>Home
+                </a>
+                <button onclick="openAdminModal()" class="px-4 py-2 bg-gray-800 border border-gray-600 hover:bg-gray-700 text-gray-300 font-bold rounded-lg transition-all text-sm">
+                    <i class="fas fa-lock mr-2"></i>Lihat Jawaban
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <form action="submit_tugas.php" method="POST" class="space-y-6">
+                <input type="hidden" name="materi_soal" value="tugas-3.html">
+
+                <div class="bg-card-bg rounded-xl p-6 border border-gray-700">
+                    <h2 class="text-xl font-semibold mb-2 text-primary">Soal 1: Kode HTML Biodata</h2>
+                    <p class="text-gray-400 text-sm mb-4">
+                        Buatlah kode HTML lengkap untuk menampilkan biodata dirimu. <br>
+                        Harus menyertakan: 
+                        <ul class="list-disc list-inside ml-2 mt-1 text-gray-500">
+                            <li>Heading (Nama Lengkap)</li>
+                            <li>Paragraf (Deskripsi singkat)</li>
+                            <li>List (Hobi atau Makanan Favorit)</li>
+                        </ul>
+                        Salin dan tempel kodemu di bawah ini:
+                    </p>
+                    <textarea name="jawaban_1" rows="10" class="w-full p-3 bg-gray-800 rounded-lg border border-gray-600 focus:ring-1 focus:ring-primary outline-none text-gray-200 font-mono text-sm" placeholder="<h1>..."></textarea>
+                </div>
+ 
+                <div class="bg-card-bg rounded-xl p-6 border border-gray-700">
+                    <h2 class="text-xl font-semibold mb-2 text-primary">Soal 2: Struktur Dasar</h2>
+                    <label class="text-gray-400 text-sm mb-4 block">Sebutkan 3 tag utama yang wajib ada dalam struktur dasar file HTML!</label>
+                    <textarea name="jawaban_2" rows="3" class="w-full p-3 bg-gray-800 rounded-lg border border-gray-600 focus:ring-1 focus:ring-primary outline-none text-gray-200" placeholder="Jawab disini..."></textarea>
+                </div>
+
+                <div class="bg-card-bg rounded-xl p-6 border border-gray-700">
+                    <h2 class="text-xl font-semibold mb-2 text-primary">Soal 3: Atribut Gambar</h2>
+                    <label class="text-gray-400 text-sm mb-4 block">Apa nama atribut yang digunakan untuk menentukan lokasi file gambar pada tag &lt;img&gt;?</label>
+                    <textarea name="jawaban_3" rows="2" class="w-full p-3 bg-gray-800 rounded-lg border border-gray-600 focus:ring-1 focus:ring-primary outline-none text-gray-200" placeholder="Jawab disini..."></textarea>
+                </div>
+
+                <button type="submit" class="w-full py-4 bg-primary hover:bg-orange-600 text-white font-bold rounded-xl transition-all text-lg shadow-lg">
+                    <i class="fas fa-paper-plane mr-2"></i> Kirim Jawaban
+                </button>
+            </form>
+        </main>
+    </div>
+
+    <!-- Admin Modal -->
+    <div id="admin-modal" class="fixed inset-0 bg-black/90 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-card-bg w-full max-w-6xl rounded-xl border border-gray-700 shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-800 rounded-t-xl">
+                <div class="flex items-center gap-3">
+                    <h3 class="text-xl font-bold text-primary"><i class="fas fa-database"></i> Data Jawaban</h3>
+                    <span id="refresh-status" class="text-[10px] bg-green-900 text-green-300 px-2 py-1 rounded hidden animate-pulse">AUTO-REFRESH AKTIF</span>
+                </div>
+                <button onclick="closeAdminModal()" class="text-gray-400 hover:text-white transition-colors"><i class="fas fa-times fa-lg"></i></button>
+            </div>
+            
+            <div class="p-6 overflow-y-auto custom-scroll flex-1 bg-dark-bg">
+                <div id="password-section" class="text-center py-10">
+                    <i class="fas fa-lock text-4xl text-gray-600 mb-4"></i>
+                    <h4 class="text-xl font-bold text-white mb-6">Masukkan Password Admin</h4>
+                    <div class="flex max-w-sm mx-auto gap-2">
+                        <input type="password" id="admin-pass" class="flex-1 bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white outline-none focus:border-primary" placeholder="Password...">
+                        <button onclick="fetchAnswers()" class="bg-primary text-white font-bold px-6 py-2 rounded-lg hover:bg-orange-600 transition-all">Buka</button>
+                    </div>
+                    <p id="error-msg" class="text-red-500 mt-4 hidden">Password salah!</p>
+                </div>
+
+                <div id="answers-content" class="hidden"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let refreshInterval = null;
+
+        function checkTaskPass() {
+            const pass = document.getElementById('task-pass-input').value;
+            if (pass.toLowerCase() === 'html') {
+                document.getElementById('access-modal').classList.add('hidden');
+                document.getElementById('main-content').classList.remove('hidden');
+            } else {
+                document.getElementById('access-error').classList.remove('hidden');
+            }
+        }
+        document.getElementById('task-pass-input').addEventListener('keypress', (e) => { if (e.key === 'Enter') checkTaskPass(); });
+
+        function openAdminModal() { document.getElementById('admin-modal').classList.remove('hidden'); document.getElementById('admin-pass').focus(); }
+        function closeAdminModal() { document.getElementById('admin-modal').classList.add('hidden'); document.getElementById('answers-content').innerHTML = ''; document.getElementById('answers-content').classList.add('hidden'); document.getElementById('password-section').classList.remove('hidden'); document.getElementById('error-msg').classList.add('hidden'); document.getElementById('refresh-status').classList.add('hidden'); if (refreshInterval) { clearInterval(refreshInterval); refreshInterval = null; } }
+        function fetchAnswers() {
+            const pass = document.getElementById('admin-pass').value;
+            const formData = new FormData(); formData.append('password', pass); formData.append('materi_soal', 'tugas-3.html');
+            fetch('get_answers.php', { method: 'POST', body: formData }).then(response => response.text()).then(html => {
+                if (html.includes('Password salah')) { document.getElementById('error-msg').classList.remove('hidden'); } else {
+                    document.getElementById('password-section').classList.add('hidden'); document.getElementById('refresh-status').classList.remove('hidden');
+                    const content = document.getElementById('answers-content'); content.innerHTML = `<p class="text-[10px] text-gray-500 mb-4 uppercase tracking-widest text-right">Update Terakhir: ${new Date().toLocaleTimeString()}</p>${html}`; content.classList.remove('hidden');
+                    if (!refreshInterval) { refreshInterval = setInterval(fetchAnswers, 5000); }
+                }
+            }).catch(err => console.error("Error fetching data:", err));
+        }
+        document.getElementById('admin-pass').addEventListener('keypress', (e) => { if (e.key === 'Enter') fetchAnswers(); });
+    </script>
+</body>
+</html>
