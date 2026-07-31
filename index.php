@@ -175,7 +175,7 @@ for ($i = 1; $i <= 20; $i++) {
             <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true): ?>
             <div id="roadmap-container" class="flex overflow-x-auto pb-4 space-x-4 custom-scrollbar">
                 <?php foreach ($materi_list as $hari => $data): ?>
-                <?php $is_locked = ($hari > 1); ?>
+                <?php $is_locked = ($hari > 2); ?>
                 <div id="materi-card-<?php echo $hari; ?>" class="menu-card flex-shrink-0 w-64 <?php echo $is_locked ? 'bg-gray-800/50 border-gray-700/50' : 'bg-card-bg border-indigo-500/20 hover:border-indigo-500/40'; ?> border rounded-2xl shadow-lg overflow-hidden flex flex-col group">
                     <!-- Card Image -->
                     <div class="h-32 w-full relative overflow-hidden">
@@ -313,7 +313,7 @@ for ($i = 1; $i <= 20; $i++) {
             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
             // Auto-scroll ke materi card 9
-            const targetIds = ['materi-card-1'];
+            const targetIds = ['materi-card-2'];
             targetIds.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });

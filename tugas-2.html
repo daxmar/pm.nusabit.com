@@ -4,9 +4,9 @@
     <link rel="icon" type="image/png" href="https://nusabit.com/assets/logo-48.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tugas Pertemuan 2 - Logika Dasar</title>
+    <title>Materi Pertemuan 2 - Logika Dasar Pemrograman</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <script>
@@ -14,146 +14,492 @@
             theme: {
                 extend: {
                     colors: {
-                        'primary': '#06B6D4',
-                        'dark-bg': '#111827',
-                        'card-bg': '#1F2937',
+                        'primary': '#F59E0B', // Amber/Emas
+                        'secondary': '#D97706',
+                        'tertiary': '#FCD34D',
+                        'dark-bg': '#0F172A',
+                        'card-bg': '#1E293B',
+                        'code-bg': '#111827',
                     },
-                    fontFamily: { sans: ['Poppins', 'sans-serif'] }
+                    fontFamily: { 
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 5px rgba(245, 158, 11, 0.5)' },
+                            '100%': { boxShadow: '0 0 20px rgba(245, 158, 11, 0.8)' },
+                        }
+                    }
                 }
             }
         }
     </script>
     <style>
-        .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
-        .custom-scroll::-webkit-scrollbar-track { background: #1f2937; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
-        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #06B6D4; }
+        body { scroll-behavior: smooth; }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        
+        .code-preview { 
+            background: linear-gradient(135deg, #1e293b, #111827); 
+            color: #cbd5e1; 
+            padding: 1.5rem; 
+            border-radius: 0.85rem; 
+            font-family: 'Fira Code', monospace; 
+            overflow-x: auto; 
+            border: 1px solid #334155;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        .code-preview::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, #F59E0B, #FCD34D);
+        }
+
+        .tag { color: #fbbf24; }
+        .attr { color: #f59e0b; }
+        .val { color: #60a5fa; }
+        .txt { color: #e5e7eb; }
+        .js { color: #38bdf8; }
+        .comment { color: #64748b; font-style: italic; }
+        .keyword { color: #c084fc; font-weight: bold; }
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .custom-scroll::-webkit-scrollbar { width: 8px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #0F172A; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #F59E0B; }
+
+        .logic-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .logic-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+        }
     </style>
 </head>
-<body class="bg-dark-bg text-gray-100 font-sans min-h-screen p-4">
+<body class="bg-dark-bg text-gray-100 font-sans min-h-screen overflow-x-hidden custom-scroll selection:bg-primary selection:text-white">
 
-    <div class="max-w-4xl mx-auto">
-        <header class="text-center mb-8 py-6 border-b-2 border-primary/50">
-            <h1 class="text-3xl font-extrabold text-primary flex items-center justify-center space-x-3">
-                <i class="fas fa-pencil-alt"></i> <span>Tugas Pertemuan 2</span>
-            </h1>
-            <p class="text-gray-400 mt-2">Logika Dasar Kehidupan Sehari-hari</p>
-            <div class="flex justify-center gap-4 mt-4">
-                <a href="index.php" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-bold rounded-lg transition-all text-sm">
-                    <i class="fas fa-home mr-2"></i>Home
-                </a>
-                <button onclick="openAdminModal()" class="px-4 py-2 bg-gray-800 border border-gray-600 hover:bg-gray-700 text-gray-300 font-bold rounded-lg transition-all text-sm">
-                    <i class="fas fa-lock mr-2"></i>Lihat Jawaban
-                </button>
-            </div>
-        </header>
-
-        <main>
-            <form action="submit_tugas.php" method="POST" class="space-y-6">
-                <input type="hidden" name="materi_soal" value="tugas-2.html">
-
-                <div class="bg-card-bg rounded-xl p-6 border border-gray-700">
-                    <h2 class="text-xl font-semibold mb-2 text-primary">Soal 1: Sequence</h2>
-                    <label class="text-gray-400 text-sm mb-4 block">Urutan meminjam buku IPA diperpus SMP lantai 2:</label>
-                    <textarea name="jawaban_1" rows="4" class="w-full p-3 bg-gray-800 rounded-lg border border-gray-600 focus:ring-1 focus:ring-primary outline-none text-gray-200" placeholder="misal : 1. Jalan pergi ke Perpustakaan..."></textarea>
-                </div>
- 
-                <div class="bg-card-bg rounded-xl p-6 border border-gray-700">
-                    <h2 class="text-xl font-semibold mb-2 text-primary">Soal 2: If-Else</h2>
-                    <label class="text-gray-400 text-sm mb-4 block">Contoh logika "JIKA" sehari-hari:</label>
-                    <textarea name="jawaban_2" rows="3" class="w-full p-3 bg-gray-800 rounded-lg border border-gray-600 focus:ring-1 focus:ring-primary outline-none text-gray-200" placeholder="misal : JIKA lapar MAKA makan..."></textarea>
-                </div>
-
-                <div class="bg-card-bg rounded-xl p-6 border border-gray-700">
-                    <h2 class="text-xl font-semibold mb-2 text-primary">Soal 3: Looping</h2>
-                    <label class="text-gray-400 text-sm mb-4 block">Kapan kita butuh perulangan?</label>
-                    <textarea name="jawaban_3" rows="3" class="w-full p-3 bg-gray-800 rounded-lg border border-gray-600 focus:ring-1 focus:ring-primary outline-none text-gray-200"placeholder="misal : Menggosok sepatu dengan sikat sampai bersih"></textarea>
-                </div>
-
-                <button type="submit" class="w-full py-4 bg-primary hover:bg-cyan-500 text-dark-bg font-bold rounded-xl transition-all text-lg shadow-lg">
-                    <i class="fas fa-paper-plane mr-2"></i> Kirim Jawaban
-                </button>
-            </form>
-        </main>
+    <!-- Floating Particles -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div class="absolute top-[-10%] right-[-10%] w-96 h-96 bg-primary/15 rounded-full blur-[100px] animate-pulse-slow"></div>
+        <div class="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-tertiary/10 rounded-full blur-[100px] animate-pulse-slow" style="animation-delay: 2s;"></div>
     </div>
 
-    <div id="admin-modal" class="fixed inset-0 bg-black/90 hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-card-bg w-full max-w-6xl rounded-xl border border-gray-700 shadow-2xl flex flex-col max-h-[90vh]">
-            <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-800 rounded-t-xl">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-dark-bg/90 backdrop-blur-xl border-b border-primary/30 shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
                 <div class="flex items-center gap-3">
-                    <h3 class="text-xl font-bold text-primary"><i class="fas fa-database"></i> Data Jawaban</h3>
-                    <span id="refresh-status" class="text-[10px] bg-green-900 text-green-300 px-2 py-1 rounded hidden animate-pulse">AUTO-REFRESH AKTIF</span>
-                </div>
-                <button onclick="closeAdminModal()" class="text-gray-400 hover:text-white transition-colors"><i class="fas fa-times fa-lg"></i></button>
-            </div>
-            
-            <div class="p-6 overflow-y-auto custom-scroll flex-1 bg-dark-bg">
-                <div id="password-section" class="text-center py-10">
-                    <i class="fas fa-lock text-4xl text-gray-600 mb-4"></i>
-                    <h4 class="text-xl font-bold text-white mb-6">Masukkan Password Admin</h4>
-                    <div class="flex max-w-sm mx-auto gap-2">
-                        <input type="password" id="admin-pass" class="flex-1 bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white outline-none focus:border-primary" placeholder="Password...">
-                        <button onclick="fetchAnswers()" class="bg-primary text-dark-bg font-bold px-6 py-2 rounded-lg hover:bg-cyan-400 transition-all">Buka</button>
+                    <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-brain text-white text-sm"></i>
                     </div>
-                    <p id="error-msg" class="text-red-500 mt-4 hidden">Password salah!</p>
+                    <span class="font-black text-xl tracking-tight">Materi<span class="text-primary font-extrabold">2</span></span>
                 </div>
-
-                <div id="answers-content" class="hidden"></div>
+                <div class="flex gap-3 items-center">
+                    <a href="materi-1.html" class="text-gray-300 hover:text-primary transition-all text-sm font-semibold flex items-center gap-1 px-3 py-1.5 rounded-lg border border-transparent hover:border-primary/30">
+                        <i class="fas fa-arrow-left"></i> Materi 1
+                    </a>
+                    <a href="index.php" class="text-gray-400 hover:text-white transition-colors text-sm">
+                        <i class="fas fa-home"></i>
+                    </a>
+                    
+                </div>
             </div>
         </div>
+    </nav>
+
+    <div class="max-w-6xl mx-auto pt-28 pb-16 px-4 sm:px-6 lg:px-8 relative z-10">
+
+        <!-- Hero Section -->
+        <header class="text-center mb-24 reveal active">
+            <div class="inline-flex flex-col items-center mb-8">
+                <div class="w-24 h-24 bg-gradient-to-br from-primary via-secondary to-tertiary rounded-3xl flex items-center justify-center shadow-2xl border-4 border-white/20 animate-float mb-3">
+                    <i class="fas fa-lightbulb text-3xl text-white drop-shadow-lg"></i>
+                </div>
+                <span class="px-4 py-1.5 bg-primary/20 text-xs font-bold rounded-full text-primary border border-primary/30 uppercase tracking-wider">Pertemuan 2</span>
+            </div>
+            <h1 class="text-5xl md:text-7xl font-black text-white mb-6 leading-tight">
+                Logika <span class="bg-gradient-to-r from-primary via-tertiary to-amber-300 bg-clip-text text-transparent drop-shadow-2xl">Dasar</span>
+                <br><span class="text-3xl md:text-4xl font-normal text-gray-300">Pemrograman</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                Komputer hanya mengerti <strong class="text-tertiary">YA</strong> atau <strong class="text-tertiary">TIDAK</strong> — ibarat lampu yang cuma bisa 
+                <span class="text-green-400 font-bold">ON</span> atau <span class="text-red-400 font-bold">OFF</span>. 
+                Yuk, belajar cara <strong class="text-primary">"berpikir seperti komputer"</strong> dengan logika! 💡
+            </p>
+        </header>
+
+        <!-- Section 1: Apa itu Logika Pemrograman -->
+        <section class="mb-24 reveal">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6">
+                    <div class="inline-flex items-center gap-3 px-5 py-2 rounded-2xl bg-primary/20 text-primary text-sm font-bold border border-primary/30">
+                        <i class="fas fa-question-circle"></i> Konsep Dasar
+                    </div>
+                    <h2 class="text-4xl font-black text-white leading-tight">Apa itu <span class="text-primary">Logika Pemrograman</span>?</h2>
+                    <p class="text-gray-300 text-lg leading-relaxed">
+                        Logika pemrograman adalah <strong class="text-tertiary">cara berpikir terstruktur</strong> yang dipakai untuk menyusun 
+                        langkah-langkah penyelesaian masalah — seperti <strong class="text-primary">resep masakan</strong> yang harus diikuti urutannya!
+                    </p>
+                    <div class="glass-card p-6 rounded-2xl border-l-4 border-primary">
+                        <p class="text-sm text-gray-300">
+                            <i class="fas fa-lightbulb text-yellow-400 mr-2"></i>
+                            <strong>Analogi:</strong> "Bangun tidur → Gosok gigi → Mandi → Sarapan" adalah algoritma! Kalau langkahnya terbalik, 
+                            hasilnya kacau! 🫠
+                        </p>
+                    </div>
+                </div>
+                <div class="code-preview text-sm lg:text-base">
+<span class="comment">// Contoh Logika Sederhana</span>
+<br><br>
+<span class="keyword">if</span> (hujan == true) {
+<br>  &nbsp;&nbsp;bawaPayung();
+<br>} <span class="keyword">else</span> {
+<br>  &nbsp;&nbsp;jalanSantai();
+<br>}
+<br><br>
+<span class="comment">// Pseudocode: bahasa manusia
+<br>// yang mirip kode!</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: 3 Pilar Logika -->
+        <section class="mb-24 reveal">
+            <div class="text-center mb-14">
+                <h2 class="text-4xl md:text-5xl font-black text-white mb-4">3 Pilar Logika Pemrograman</h2>
+                <p class="text-xl text-gray-400">Setiap program komputer dibangun dari 3 struktur dasar ini!</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Sequence -->
+                <div class="logic-card glass-card p-8 rounded-3xl text-center border-t-4 border-blue-500 group">
+                    <div class="w-16 h-16 bg-blue-500/20 rounded-2xl flex items-center justify-center mx-auto mb-5 text-blue-400 text-3xl group-hover:scale-110 transition-all">
+                        <i class="fas fa-list-ol"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">1. Sequence 🔢</h3>
+                    <p class="text-gray-400 text-sm mb-4">Urutan langkah <strong>berurutan</strong></p>
+                    <p class="text-gray-300 mb-4">Setiap instruksi dijalankan satu per satu dari atas ke bawah. <strong class="text-blue-400">Gak boleh loncat atau terbalik!</strong></p>
+                    <div class="code-preview text-xs text-left">
+1. Nyalakan komputer
+<br>2. Buka browser
+<br>3. Ketik alamat website
+<br>4. Enter
+                    </div>
+                </div>
+
+                <!-- Selection -->
+                <div class="logic-card glass-card p-8 rounded-3xl text-center border-t-4 border-green-500 group">
+                    <div class="w-16 h-16 bg-green-500/20 rounded-2xl flex items-center justify-center mx-auto mb-5 text-green-400 text-3xl group-hover:scale-110 transition-all">
+                        <i class="fas fa-code-branch"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">2. Selection 🔀</h3>
+                    <p class="text-gray-400 text-sm mb-4">Pilih salah satu <strong>kondisi</strong></p>
+                    <p class="text-gray-300 mb-4">Komputer bisa <strong class="text-green-400">memilih</strong> tindakan berdasarkan kondisi tertentu. <strong class="text-yellow-400">IF - ELSE</strong>!</p>
+                    <div class="code-preview text-xs text-left">
+<span class="keyword">if</span> (nilai >= 75) {
+<br>  &nbsp;&nbsp;lulus = true;
+<br>} <span class="keyword">else</span> {
+<br>  &nbsp;&nbsp;lulus = false;
+<br>}
+                    </div>
+                </div>
+
+                <!-- Iteration -->
+                <div class="logic-card glass-card p-8 rounded-3xl text-center border-t-4 border-purple-500 group">
+                    <div class="w-16 h-16 bg-purple-500/20 rounded-2xl flex items-center justify-center mx-auto mb-5 text-purple-400 text-3xl group-hover:scale-110 transition-all">
+                        <i class="fas fa-rotate"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-3">3. Iteration 🔄</h3>
+                    <p class="text-gray-400 text-sm mb-4">Ulang langkah <strong>berkali-kali</strong></p>
+                    <p class="text-gray-300 mb-4">Komputer jago banget ngulang tugas ribuan kali tanpa capek. <strong class="text-purple-400">Looping / Perulangan!</strong></p>
+                    <div class="code-preview text-xs text-left">
+<span class="keyword">for</span> (i = 1; i <= 5; i++) {
+<br>  &nbsp;&nbsp;cuciPiring();
+<br>  &nbsp;&nbsp;keringkan();
+<br>}
+<br><span class="comment">// Ulang 5 kali!</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Operator Logika -->
+        <section class="mb-24 reveal">
+            <div class="text-center mb-14">
+                <h2 class="text-4xl md:text-5xl font-black text-white mb-4">Operator Logika</h2>
+                <p class="text-xl text-gray-400">"Kata sambung" yang menghubungkan kondisi-kondisi dalam logika!</p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                <div class="glass-card p-8 rounded-3xl border border-gray-700 group hover:border-blue-500/50 transition-all">
+                    <h3 class="text-3xl font-black text-center text-blue-400 mb-4">AND <span class="text-xl text-gray-400">(&&)</span></h3>
+                    <p class="text-gray-300 text-center mb-4">Semua kondisi harus <strong class="text-green-400">BENAR</strong> supaya hasilnya benar.</p>
+                    <div class="code-preview text-xs">
+<span class="comment">// Dua-duanya harus benar!</span>
+<br><span class="keyword">if</span> (hujan == false <span class="keyword">&&</span> 
+<br>  &nbsp;&nbsp;&nbsp;&nbsp;bawaUang == true) {
+<br>  &nbsp;&nbsp;beliEsKrim();
+<br>}
+                    </div>
+                    <p class="text-gray-500 text-xs text-center mt-4">✅ ✅ = ✅ | ✅ ❌ = ❌ | ❌ ❌ = ❌</p>
+                </div>
+
+                <div class="glass-card p-8 rounded-3xl border border-gray-700 group hover:border-green-500/50 transition-all">
+                    <h3 class="text-3xl font-black text-center text-green-400 mb-4">OR <span class="text-xl text-gray-400">(||)</span></h3>
+                    <p class="text-gray-300 text-center mb-4">Cukup <strong class="text-green-400">SATU</strong> kondisi benar, hasilnya benar.</p>
+                    <div class="code-preview text-xs">
+<span class="comment">// Salah satu benar cukup!</span>
+<br><span class="keyword">if</span> (punyaPensil == true <span class="keyword">||</span> 
+<br>  &nbsp;&nbsp;&nbsp;&nbsp;punyaPulpen == true) {
+<br>  &nbsp;&nbsp;bisaNulis();
+<br>}
+                    </div>
+                    <p class="text-gray-500 text-xs text-center mt-4">✅ ✅ = ✅ | ✅ ❌ = ✅ | ❌ ❌ = ❌</p>
+                </div>
+
+                <div class="glass-card p-8 rounded-3xl border border-gray-700 group hover:border-red-500/50 transition-all">
+                    <h3 class="text-3xl font-black text-center text-red-400 mb-4">NOT <span class="text-xl text-gray-400">(!)</span></h3>
+                    <p class="text-gray-300 text-center mb-4">Membalikkan kondisi. Benar jadi <strong class="text-red-400">salah</strong>, salah jadi <strong class="text-green-400">benar</strong>.</p>
+                    <div class="code-preview text-xs">
+<span class="comment">// Kebalikan!</span>
+<br><span class="keyword">if</span> (<span class="keyword">!</span>sedangHujan) {
+<br>  &nbsp;&nbsp;jalanJalan();
+<br>}
+<br><span class="comment">// Artinya: "JIKA TIDAK hujan"</span>
+                    </div>
+                    <p class="text-gray-500 text-xs text-center mt-4">!✅ = ❌ | !❌ = ✅</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Demo Logika Interaktif -->
+        <section class="mb-24 reveal">
+            <div class="text-center mb-14">
+                <h2 class="text-4xl md:text-5xl font-black text-white mb-4">🎮 Demo Logika Interaktif</h2>
+                <p class="text-xl text-gray-400">Coba pencet tombol di bawah — lihat bagaimana logika bekerja!</p>
+            </div>
+
+            <div class="glass-card p-10 rounded-4xl border-2 border-primary/30 max-w-2xl mx-auto">
+                <h3 class="text-3xl font-black text-white mb-8 text-center">Kalkulator Lulus / Tidak 🎓</h3>
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-300 mb-2">Masukkan Nilai Ujian (0-100):</label>
+                        <input type="number" id="nilaiInput" placeholder="Contoh: 85" min="0" max="100" class="w-full p-5 text-xl bg-gray-800 text-white border border-gray-600 rounded-2xl focus:border-primary focus:ring-2 focus:ring-primary/30 text-center">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-300 mb-2">Absensi ≥ 75%?</label>
+                            <select id="absensiSelect" class="w-full p-4 bg-gray-800 text-white border border-gray-600 rounded-xl focus:border-primary">
+                                <option value="true">✅ Ya (≥75%)</option>
+                                <option value="false">❌ Tidak (<75%)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-300 mb-2">Tugas Selesai?</label>
+                            <select id="tugasSelect" class="w-full p-4 bg-gray-800 text-white border border-gray-600 rounded-xl focus:border-primary">
+                                <option value="true">✅ Semua selesai</option>
+                                <option value="false">❌ Ada yang kurang</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button onclick="cekKelulusan()" class="w-full bg-gradient-to-r from-primary to-secondary hover:from-amber-600 hover:to-amber-700 text-white font-black py-5 px-8 rounded-2xl text-xl shadow-2xl hover:shadow-amber-500/30 transition-all">
+                        <i class="fas fa-check-circle mr-2"></i> Cek Kelulusan!
+                    </button>
+                    <div id="hasilLogika" class="p-8 bg-gray-800/50 rounded-2xl border border-gray-600 text-xl font-bold text-center min-h-[120px] flex items-center justify-center">
+                        Masukkan data, lalu klik tombol! 🎯
+                    </div>
+                    <div class="code-preview text-xs p-4">
+<span class="comment">// Logika di balik tombol:</span>
+<br><span class="keyword">if</span> (nilai >= 75 <span class="keyword">&&</span> absensi == true <span class="keyword">&&</span> tugas == true) {
+<br>  &nbsp;&nbsp;lulus = <span class="keyword">true</span>;
+<br>} <span class="keyword">else</span> {
+<br>  &nbsp;&nbsp;lulus = <span class="keyword">false</span>;
+<br>}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Flowchart Visual -->
+        <section class="mb-24 reveal">
+            <div class="text-center mb-14">
+                <h2 class="text-4xl md:text-5xl font-black text-white mb-4">Flowchart: Peta Logika</h2>
+                <p class="text-xl text-gray-400">Sebelum nulis kode, buat dulu <strong class="text-tertiary">diagram alir</strong> — biar gak bingung!</p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6">
+                    <div class="glass-card p-6 rounded-2xl border-l-4 border-primary">
+                        <h4 class="text-white font-bold mb-3"><i class="fas fa-diagram-project text-primary mr-2"></i> Simbol Flowchart</h4>
+                        <ul class="text-gray-300 text-sm space-y-3">
+                            <li class="flex items-center gap-3">
+                                <span class="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center text-green-400">⬤</span>
+                                <span><strong class="text-green-400">Mulai/Selesai</strong> — Terminal</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <span class="w-8 h-8 bg-blue-500/20 flex items-center justify-center text-blue-400">▱</span>
+                                <span><strong class="text-blue-400">Proses</strong> — Aksi / langkah</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <span class="w-8 h-8 bg-yellow-500/20 flex items-center justify-center text-yellow-400">◇</span>
+                                <span><strong class="text-yellow-400">Decision</strong> — Pilihan YA/TIDAK</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <span class="w-8 h-8 bg-purple-500/20 flex items-center justify-center text-purple-400">→</span>
+                                <span><strong class="text-purple-400">Arrow</strong> — Alur / arah langkah</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl border border-gray-700">
+                        <h4 class="text-white font-bold mb-3">📝 Latihan: Buat Flowchart</h4>
+                        <p class="text-gray-400 text-sm">"Cek apakah bisa main game: PR selesai AND sudah jam 7 malam"</p>
+                        <div class="mt-4 code-preview text-xs p-3">
+1. 🟢 Mulai
+<br>2. ▱ Cek PR selesai?
+<br>3. ◇ PR selesai? → ❌ → "Belum boleh main"
+<br>4. ◇ PR selesai? → ✅ → Cek jam ≥ 19:00?
+<br>5. ◇ Jam ≥ 19:00? → ❌ → "Tunggu sampai jam 7"
+<br>6. ◇ Jam ≥ 19:00? → ✅ → "Silakan main! 🎮"
+<br>7. 🟢 Selesai
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card p-8 rounded-3xl border-2 border-primary/30 flex flex-col items-center">
+                    <h4 class="text-white font-bold mb-6 text-xl">Visual Flowchart</h4>
+                    <div class="flex flex-col items-center gap-3 text-sm">
+                        <div class="px-6 py-2 rounded-full bg-green-500/20 border border-green-500 text-green-400 font-bold">MULAI</div>
+                        <i class="fas fa-arrow-down text-gray-500"></i>
+                        <div class="px-6 py-3 rounded-lg bg-blue-500/20 border border-blue-500 text-blue-400">Masukkan nilai</div>
+                        <i class="fas fa-arrow-down text-gray-500"></i>
+                        <div class="px-6 py-4 rounded-xl bg-yellow-500/20 border-2 border-yellow-500 text-yellow-300 font-bold">Nilai ≥ 75?</div>
+                        <div class="flex gap-8">
+                            <div class="flex flex-col items-center">
+                                <span class="text-green-400 font-bold">✅ YA</span>
+                                <i class="fas fa-arrow-down text-gray-500"></i>
+                                <div class="px-4 py-2 rounded-lg bg-green-500/20 border border-green-500 text-green-300">LULUS 🎉</div>
+                            </div>
+                            <div class="flex flex-col items-center">
+                                <span class="text-red-400 font-bold">❌ TIDAK</span>
+                                <i class="fas fa-arrow-down text-gray-500"></i>
+                                <div class="px-4 py-2 rounded-lg bg-red-500/20 border border-red-500 text-red-300">TIDAK LULUS</div>
+                            </div>
+                        </div>
+                        <i class="fas fa-arrow-down text-gray-500"></i>
+                        <div class="px-6 py-2 rounded-full bg-green-500/20 border border-green-500 text-green-400 font-bold">SELESAI</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="reveal">
+            <div class="bg-gradient-to-r from-primary via-secondary to-amber-600 rounded-4xl p-12 lg:p-16 text-center shadow-2xl relative overflow-hidden border-4 border-white/10">
+                <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzRjMC0yIDItNCA0LTRzNCAyIDQgNC0yIDQtNCA0LTQtMi00LTR6bTAtMjRjMC0yIDItNCA0LTRzNCAyIDQgNC0yIDQtNCA0LTQtMi00LTR6bS0yNCA0YzAtMiAyLTQgNC00czQgMiA0IDQtMiA0LTQgNC00LTItNC00eiIvPjwvZz48L2c+PC9zdmc+')] opacity-20"></div>
+                <div class="relative z-10">
+                    <div class="w-24 h-24 bg-white/20 backdrop-blur-sm rounded-3xl flex items-center justify-center mx-auto mb-8 border-2 border-white/30">
+                        <i class="fas fa-arrow-right text-4xl text-white"></i>
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-black text-white mb-6">🎯 Siap ke Materi 3?</h2>
+                    <p class="text-white/90 text-xl mb-10 max-w-2xl mx-auto">
+                        Logika sudah dikuasai! Besok saatnya belajar di Materi 3.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-5 justify-center">
+                       
+                        <a href="index.php" class="px-10 py-5 bg-black/30 text-white font-black rounded-2xl border-2 border-white/30 hover:bg-black/50 transition-all flex items-center justify-center gap-3 text-lg">
+                            <i class="fas fa-home"></i> Kembali ke Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </div>
 
+    <!-- Footer -->
+    <footer class="bg-dark-bg border-t border-primary/20 py-12 mt-16">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <div class="flex items-center justify-center gap-6 mb-6 text-2xl">
+                <i class="fab fa-html5 text-orange-500"></i>
+                <i class="fab fa-css3-alt text-blue-500"></i>
+                <i class="fab fa-js text-yellow-500 animate-pulse"></i>
+            </div>
+            <p class="text-gray-500 text-sm mb-2">© 2026 Nusabit Code Kitchen - Materi 2: Logika Dasar 🧠</p>
+            <p class="text-xs text-gray-600">Dibuat untuk siswa SMP yang suka mikir logis! 💡</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
     <script>
-        let refreshInterval = null;
+        // Demo Logika Interaktif
+        function cekKelulusan() {
+            let nilai = parseInt(document.getElementById('nilaiInput').value);
+            let absensi = document.getElementById('absensiSelect').value === 'true';
+            let tugas = document.getElementById('tugasSelect').value === 'true';
+            let hasil = document.getElementById('hasilLogika');
 
-        function openAdminModal() { 
-            document.getElementById('admin-modal').classList.remove('hidden'); 
-            document.getElementById('admin-pass').focus(); 
+            if (!nilai || nilai < 0 || nilai > 100) {
+                hasil.innerHTML = '<i class="fas fa-exclamation-triangle text-yellow-400 text-3xl mr-3"></i> Masukkan nilai valid (0-100)!';
+                return;
+            }
+
+            // Logika AND: semua harus terpenuhi!
+            let lulus = (nilai >= 75) && absensi && tugas;
+
+            let detail = `
+                <div class="text-left space-y-2 text-sm mb-4 bg-gray-900/50 p-4 rounded-xl">
+                    <p>📝 Nilai: <strong>${nilai}</strong> ${nilai >= 75 ? '✅' : '❌'} (min 75)</p>
+                    <p>📋 Absensi: ${absensi ? '✅ ≥75%' : '❌ <75%'}</p>
+                    <p>📚 Tugas: ${tugas ? '✅ Selesai' : '❌ Kurang'}</p>
+                    <p class="text-gray-500 text-xs mt-2">Logika: <span class="text-yellow-400">${nilai >= 75} && ${absensi} && ${tugas}</span></p>
+                </div>
+            `;
+
+            if (lulus) {
+                hasil.innerHTML = detail + `
+                    <div class="animate-glow rounded-2xl p-4">
+                        <i class="fas fa-trophy text-yellow-400 text-5xl mb-3"></i>
+                        <span class="text-green-400 text-3xl font-black">🎉 LULUS!</span>
+                        <p class="text-gray-300 text-sm mt-2">Semua syarat terpenuhi. Selamat! 🥳</p>
+                    </div>
+                `;
+            } else {
+                hasil.innerHTML = detail + `
+                    <div>
+                        <i class="fas fa-times-circle text-red-400 text-5xl mb-3"></i>
+                        <span class="text-red-400 text-3xl font-black">❌ TIDAK LULUS</span>
+                        <p class="text-gray-300 text-sm mt-2">Ada syarat yang belum terpenuhi. Tetap semangat! 💪</p>
+                    </div>
+                `;
+            }
         }
 
-        function closeAdminModal() { 
-            document.getElementById('admin-modal').classList.add('hidden'); 
-            document.getElementById('answers-content').innerHTML = ''; 
-            document.getElementById('answers-content').classList.add('hidden'); 
-            document.getElementById('password-section').classList.remove('hidden'); 
-            document.getElementById('error-msg').classList.add('hidden');
-            document.getElementById('refresh-status').classList.add('hidden');
-            if (refreshInterval) { clearInterval(refreshInterval); refreshInterval = null; }
-        }
-
-        function fetchAnswers() {
-            const pass = document.getElementById('admin-pass').value;
-            const formData = new FormData();
-            formData.append('password', pass);
-            formData.append('materi_soal', 'tugas-2.html');
-
-            fetch('get_answers.php', { method: 'POST', body: formData })
-            .then(response => response.text())
-            .then(html => {
-                if (html.includes('Password salah')) {
-                    document.getElementById('error-msg').classList.remove('hidden');
-                } else {
-                    document.getElementById('password-section').classList.add('hidden');
-                    document.getElementById('refresh-status').classList.remove('hidden');
-                    const content = document.getElementById('answers-content');
-                    
-                    // Update content
-                    content.innerHTML = `
-                        <p class="text-[10px] text-gray-500 mb-4 uppercase tracking-widest text-right">Update Terakhir: ${new Date().toLocaleTimeString()}</p>
-                        ${html}
-                    `;
-                    content.classList.remove('hidden');
-
-                    // Set interval 5 detik jika belum ada
-                    if (!refreshInterval) {
-                        refreshInterval = setInterval(fetchAnswers, 5000);
-                    }
-                }
-            })
-            .catch(err => console.error("Error fetching data:", err));
-        }
-
-        document.getElementById('admin-pass').addEventListener('keypress', (e) => { if (e.key === 'Enter') fetchAnswers(); });
+        // Reveal Animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     </script>
 </body>
 </html>
+
