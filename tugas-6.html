@@ -39,8 +39,36 @@
     </nav>
 
     <main class="max-w-5xl mx-auto space-y-20">
+        <!-- Password Gate -->
+        <section id="password-gate" class="glass-card p-16 lg:p-24 rounded-4xl shadow-3xl text-center border border-orange-400/50 fade-in">
+            <div class="w-32 h-32 bg-gradient-to-br from-amber-400 to-orange-500 rounded-4xl flex items-center justify-center mx-auto mb-12 shadow-3xl text-4xl font-black">
+                <i class="fas fa-lock"></i>
+            </div>
+            <h1 class="text-5xl lg:text-6xl font-black mb-8 bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
+                Tugas 6 - Review Quiz
+            </h1>
+            <h2 class="text-2xl lg:text-3xl font-bold mb-8 text-white/95">Materi 1-6 (12 Soal • 100 Poin)</h2>
+            <p class="text-xl mb-12 max-w-2xl mx-auto text-white/80 leading-relaxed">
+                Masukkan password untuk mengakses quiz ini.
+            </p>
+            <div class="max-w-md mx-auto space-y-6">
+                <div>
+                    <label class="block text-lg font-bold mb-3 text-left text-white/90">Password</label>
+                    <input type="password" id="password-input" placeholder="Masukkan password..." 
+                        class="w-full p-5 rounded-2xl bg-white/10 border border-white/30 text-white text-xl font-semibold placeholder-white/50 focus:outline-none focus:ring-4 focus:ring-amber-400/50 transition-all"
+                        onkeypress="if(event.key==='Enter') checkPassword()">
+                </div>
+                <div id="password-error" class="hidden p-4 rounded-2xl bg-red-500/20 border border-red-400/50 text-red-300 font-bold">
+                    <i class="fas fa-exclamation-circle mr-2"></i>Password salah! Coba lagi.
+                </div>
+                <button onclick="checkPassword()" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-black text-2xl px-10 py-6 rounded-3xl shadow-2xl hover:scale-105 transition-all demo-button">
+                    <i class="fas fa-unlock mr-3"></i>Masuk
+                </button>
+            </div>
+        </section>
+
         <!-- Hero Challenge -->
-        <section class="glass-card p-16 lg:p-24 rounded-4xl shadow-3xl text-center border border-orange-400/50 fade-in">
+        <section id="hero-section" class="glass-card p-16 lg:p-24 rounded-4xl shadow-3xl text-center border border-orange-400/50 fade-in hidden">
             <div class="w-32 h-32 bg-gradient-to-br from-emerald-400 to-teal-400 rounded-4xl flex items-center justify-center mx-auto mb-12 shadow-3xl text-4xl font-black">
                 <i class="fas fa-question-circle"></i>
             </div>
@@ -60,6 +88,11 @@
                         <div id="progress-bar" class="bg-emerald-400 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
                     </div>
                 </div>
+            </div>
+            <div class="max-w-md mx-auto mb-8">
+                <label class="block text-lg font-bold mb-3 text-left text-white/90">Nama Kamu</label>
+                <input type="text" id="player-name" placeholder="Masukkan nama lengkap..." 
+                    class="w-full p-5 rounded-2xl bg-white/10 border border-white/30 text-white text-xl font-semibold placeholder-white/50 focus:outline-none focus:ring-4 focus:ring-emerald-400/50 transition-all">
             </div>
             <button onclick="startQuiz()" class="bg-white text-orange-600 font-black text-3xl px-20 py-10 rounded-4xl shadow-3xl hover:scale-105 transition-all demo-button inline-flex items-center gap-6">
                 <i class="fas fa-play-circle text-5xl"></i> Mulai Quiz!
@@ -189,8 +222,35 @@
 
         let currentScore = 0;
         let answered = [];
+        let quizStartTime = null;
+        let quizEndTime = null;
+        let playerName = '';
+        const QUIZ_PASSWORD = '100';
+
+        function checkPassword() {
+            const input = document.getElementById('password-input').value;
+            const errorDiv = document.getElementById('password-error');
+            
+            if (input === QUIZ_PASSWORD) {
+                document.getElementById('password-gate').classList.add('hidden');
+                document.getElementById('hero-section').classList.remove('hidden');
+                errorDiv.classList.add('hidden');
+            } else {
+                errorDiv.classList.remove('hidden');
+                document.getElementById('password-input').value = '';
+                document.getElementById('password-input').focus();
+            }
+        }
 
         function startQuiz() {
+            playerName = document.getElementById('player-name').value.trim();
+            if (!playerName) {
+                alert('Masukkan nama kamu dulu ya!');
+                document.getElementById('player-name').focus();
+                return;
+            }
+            quizStartTime = new Date();
+            document.getElementById('hero-section').classList.add('hidden');
             document.getElementById('quiz-section').classList.remove('hidden');
             renderQuestions();
             document.getElementById('quiz-section').scrollIntoView({ behavior: 'smooth' });
@@ -271,6 +331,12 @@
         }
 
         function finishQuiz() {
+            quizEndTime = new Date();
+            const timeTaken = Math.round((quizEndTime - quizStartTime) / 1000);
+            const minutes = Math.floor(timeTaken / 60);
+            const seconds = timeTaken % 60;
+            const timeString = `${minutes}m ${seconds}s`;
+
             document.getElementById('quiz-section').classList.add('hidden');
             document.getElementById('results-section').classList.remove('hidden');
             
@@ -299,13 +365,45 @@
                 title.textContent = '🔥 Keep Practicing!';
                 message.textContent = 'Masih perlu latihan. Main ulang atau review materi dulu!';
             }
+
+            sendResultToServer(playerName, finalScore, timeString);
+        }
+
+        function sendResultToServer(name, score, timeTaken) {
+            const resultData = {
+                nama: name,
+                nilai: score,
+                waktu: timeTaken,
+                tugas: 'Tugas 6 - Review Quiz Materi 1-6',
+                timestamp: new Date().toISOString()
+            };
+
+            fetch('https://pm.nusabit.com/api/submit-quiz.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(resultData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Result submitted successfully:', data);
+            })
+            .catch(error => {
+                console.log('Result saved locally:', resultData);
+            });
         }
 
         function resetQuiz() {
             currentScore = 0;
             answered = [];
+            quizStartTime = null;
+            quizEndTime = null;
+            playerName = '';
             document.getElementById('quiz-section').classList.add('hidden');
             document.getElementById('results-section').classList.add('hidden');
+            document.getElementById('hero-section').classList.remove('hidden');
+            document.getElementById('player-name').value = '';
             updateProgress();
         }
 

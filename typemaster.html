@@ -160,8 +160,15 @@
     </div>
 
     <script>
-        const targetText = "ketika kita melihat ke masa depan, penting untuk diingat bahwa teknologi bukanlah tujuan akhir, melainkan alat yang memungkinkan kita mencapai potensi penuh sebagai manusia. fokus pada pembelajaran berkelanjutan, adaptasi cepat, dan inovasi adalah kunci untuk menavigasi lanskap digital yang terus berubah dengan sukses dan integritas. ketik cepat dan tepat untuk menang!";
+        const textSamples = [
+            "ketika kita melihat ke masa depan, penting untuk diingat bahwa teknologi bukanlah tujuan akhir, melainkan alat yang memungkinkan kita mencapai potensi penuh sebagai manusia.",
+            "fokus pada pembelajaran berkelanjutan, adaptasi cepat, dan inovasi adalah kunci untuk menavigasi lanskap digital yang terus berubah dengan sukses dan integritas.",
+            "mengetik dengan cepat dan akurat adalah keterampilan fundamental di era digital, membuka pintu ke efisiensi dan komunikasi yang lebih baik dalam berbagai aspek kehidupan.",
+            "jangan pernah meremehkan kekuatan dari sebuah latihan yang konsisten; setiap hari adalah kesempatan baru untuk menjadi versi yang lebih baik dari diri sendiri.",
+            "kesalahan adalah bagian tak terpisahkan dari proses belajar, jadi terimalah setiap kesalahan, perbaiki, dan terus maju dengan pola pikir yang positif dan berkembang."
+        ];
         
+        let targetText = "";
         const $textDisplay = document.getElementById('text-display');
         const $typingInput = document.getElementById('typing-input');
         const $wpmDisplay = document.getElementById('wpm-display');
@@ -190,6 +197,8 @@
             $errorsDisplay.textContent = '0';
             $typingInput.value = '';
             
+            targetText = textSamples[Math.floor(Math.random() * textSamples.length)];
+
             renderText();
             highlightNextKey();
             $typingInput.focus();
@@ -237,7 +246,7 @@
         function finishTest() {
             isStarted = false;
             clearInterval(timerInterval);
-            $textDisplay.innerHTML += `<p class="mt-4 text-green-400 font-bold">Tes Selesai! Skor Akhir: ${$wpmDisplay.textContent} WPM</p>`;
+            $textDisplay.innerHTML += `<p class="mt-4 text-green-400 font-bold">Tes Selesai! Skor Akhir: ${$wpmDisplay.textContent} WPM (Words Per Minute)</p>`;
             $keyboardKeys.forEach(key => key.classList.remove('highlight'));
         }
 
